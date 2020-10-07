@@ -18,5 +18,32 @@ $converterOptiPic = new \optipic\cdn\ImgUrlConverter(
 
 echo $converterOptiPic->convertHtml($html);
 ```
+## What will be converted (examples)
+```
+<img src="/foo/bar/img.png"/> ---CONVERT--> <img src="//cdn.optipic.io/site-99999999/foo/bar/img.png"/>
+<img data-src="/foo/bar/img.png"/> ---CONVERT--> <img data-src="//cdn.optipic.io/site-99999999/foo/bar/img.png"/>
+<img foo-bar-attr='/foo/bar/img.png'/> ---CONVERT--> <img foo-bar-attr='//cdn.optipic.io/site-99999999/foo/bar/img.png'/>
+backhround: url(/foo/bar/img.jpg) ---CONVERT--> backhround: url(//cdn.optipic.io/site-99999999/foo/bar/img.jpg)
+backhround: url("/foo/bar/img.jpg") ---CONVERT--> backhround: url("//cdn.optipic.io/site-99999999/foo/bar/img.jpg")
+backhround: url('/foo/bar/img.jpg') ---CONVERT--> backhround: url('//cdn.optipic.io/site-99999999/foo/bar/img.jpg')
+<img src="http://mydomain.com/foo/bar/img.png"/> ---CONVERT--> <img src="//cdn.optipic.io/site-99999999/foo/bar/img.png"/>
+<img data-src="http://mydomain.com/foo/bar/img.png"/> ---CONVERT--> <img data-src="//cdn.optipic.io/site-99999999/foo/bar/img.png"/>
+<img foo-bar-attr='http://mydomain.com/foo/bar/img.png'/> ---CONVERT--> <img foo-bar-attr='//cdn.optipic.io/site-99999999/foo/bar/img.png'/>
+backhround: url(http://mydomain.com/foo/bar/img.jpg) ---CONVERT--> backhround: url(//cdn.optipic.io/site-99999999/foo/bar/img.jpg)
+backhround: url("http://mydomain.com/foo/bar/img.jpg") ---CONVERT--> backhround: url("//cdn.optipic.io/site-99999999/foo/bar/img.jpg")
+backhround: url('http://mydomain.com/foo/bar/img.jpg') ---CONVERT--> backhround: url('//cdn.optipic.io/site-99999999/foo/bar/img.jpg')
+<img src="https://mydomain.com/foo/bar/img.png"/> ---CONVERT--> <img src="//cdn.optipic.io/site-99999999/foo/bar/img.png"/>
+<img data-src="https://mydomain.com/foo/bar/img.png"/> ---CONVERT--> <img data-src="//cdn.optipic.io/site-99999999/foo/bar/img.png"/>
+<img foo-bar-attr='https://mydomain.com/foo/bar/img.png'/> ---CONVERT--> <img foo-bar-attr='//cdn.optipic.io/site-99999999/foo/bar/img.png'/>
+backhround: url(https://mydomain.com/foo/bar/img.jpg) ---CONVERT--> backhround: url(//cdn.optipic.io/site-99999999/foo/bar/img.jpg)
+backhround: url("https://mydomain.com/foo/bar/img.jpg") ---CONVERT--> backhround: url("//cdn.optipic.io/site-99999999/foo/bar/img.jpg")
+backhround: url('https://mydomain.com/foo/bar/img.jpg') ---CONVERT--> backhround: url('//cdn.optipic.io/site-99999999/foo/bar/img.jpg')
+<img src="https://NOTmydomain.com/foo/bar/img.png"/> ---CONVERT--> <img src="https://NOTmydomain.com/foo/bar/img.png"/>
+<img data-src="https://NOTmydomain.com/foo/bar/img.png"/> ---CONVERT--> <img data-src="https://NOTmydomain.com/foo/bar/img.png"/>
+<img foo-bar-attr='https://NOTmydomain.com/foo/bar/img.png'/> ---CONVERT--> <img foo-bar-attr='https://NOTmydomain.com/foo/bar/img.png'/>
+backhround: url(https://NOTmydomain.com/foo/bar/img.jpg) ---CONVERT--> backhround: url(https://NOTmydomain.com/foo/bar/img.jpg)
+backhround: url("http://NOTmydomain.com/foo/bar/img.jpg") ---CONVERT--> backhround: url("http://NOTmydomain.com/foo/bar/img.jpg")
+backhround: url('https://NOTmydomain.com/foo/bar/img.jpg') ---CONVERT--> backhround: url('https://NOTmydomain.com/foo/bar/img.jpg')
+```
 
 More live examples see in `/examples/example.php` script.
