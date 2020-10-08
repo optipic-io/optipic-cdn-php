@@ -47,7 +47,6 @@ ob_start(array('\optipic\cdn\ImgUrlConverter', 'convertHtml'));
 
 You may use our lib to convert image URLs exactly where you want in your project to convert whole HTML-block contains image URLs.
 
-## Example
 ```php
 $converterOptiPic = new \optipic\cdn\ImgUrlConverter(
     99999999,                                       // your SITE ID from CDN OptiPic controll panel
