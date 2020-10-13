@@ -127,3 +127,8 @@ backhround: url('https://NOTmydomain.com/foo/bar/img.jpg') ---CONVERT--> backhro
 ```
 
 More live examples see in `/examples/example.php` script.
+
+## Where is `php.ini` on different hostings
+
+### Beget
+`<SITE_ROOT_DIRECTORY>/cgi-bin/php.ini`
