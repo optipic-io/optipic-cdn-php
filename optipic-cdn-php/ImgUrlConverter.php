@@ -72,7 +72,11 @@ class ImgUrlConverter {
     /**
      * Load config from file or array
      */
-    public static function loadConfig($source=__DIR__.'/config.php') {
+    public static function loadConfig($source=false) {
+        if($source===false) {
+            $source = __DIR__ . '/config.php';
+        }
+        
         if(is_array($source)) {
             self::$siteId = $source['site_id'];
             self::$domains = $source['domains'];

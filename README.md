@@ -24,9 +24,9 @@ php_value auto_prepend_file "<SITE_ROOT_DIRECTORY>/optipic-cdn-php/optipic-cdn-p
 ### Example using php.ini
 
 ```
-; Automatically add files after PHP document.
-; http://php.net/auto-append-file
-auto_append_file = <SITE_ROOT_DIRECTORY>/optipic-cdn-php/optipic-cdn-php/auto_prepend_file.php
+; Automatically add files before PHP document.
+; http://php.net/auto-prepend-file
+auto_prepend_file = <SITE_ROOT_DIRECTORY>/optipic-cdn-php/optipic-cdn-php/auto_prepend_file.php
 ```
 
 ## Use case #2: Automatic convert image URLs using your site's entry point php-script
