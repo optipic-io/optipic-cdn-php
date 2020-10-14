@@ -136,3 +136,9 @@ More live examples see in `/examples/example.php` script.
 
 ### Beget
 `<SITE_ROOT_DIRECTORY>/cgi-bin/php.ini`
+
+### Reg.ru
+https://www.reg.ru/support/hosting-i-servery/yazyki-programmirovaniya-i-skripty/kak-izmenit-parametry-php
+
+If it does not work you also may create/edit file `.user.ini` in the site's root directory - alternative of php.ini file.
+https://www.php.net/manual/en/configuration.file.per-user.php
