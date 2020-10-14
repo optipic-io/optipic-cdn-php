@@ -13,5 +13,9 @@
 
 require_once __DIR__.'/ImgUrlConverter.php';
 
-ob_start(array('\optipic\cdn\ImgUrlConverter', 'convertHtml'));
+\optipic\cdn\ImgUrlConverter::loadConfig();
+
+if(\optipic\cdn\ImgUrlConverter::isEnabled()) {
+    ob_start(array('\optipic\cdn\ImgUrlConverter', 'convertHtml'));
+}
 ?>

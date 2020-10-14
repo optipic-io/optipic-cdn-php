@@ -1,10 +1,13 @@
 <?php
 require_once __DIR__.'/../optipic-cdn-php/ImgUrlConverter.php';
 
-$converterOptiPic = new \optipic\cdn\ImgUrlConverter(
-    99999999,                                       // your SITE ID from CDN OptiPic controll panel
-    array('mydomain.com', 'www.mydomain.com')       // list of domains should replace to cdn.optipic.io
-);
+$converterOptiPic = new \optipic\cdn\ImgUrlConverter(array(
+    'site_id' => 99999999,                                       // your SITE ID from CDN OptiPic controll panel
+    'domains' => array('mydomain.com', 'www.mydomain.com'),      // list of domains should replace to cdn.optipic.io
+    'exclusions_url' => array('/test/test/index.php',),          // list of URL exclusions - where is URL should not converted
+));
+
+var_dump(\optipic\cdn\ImgUrlConverter::isEnabled());
 
 $htmls = array(
     // local urls

@@ -9,5 +9,6 @@
 return array(
     'site_id' => '0',     // your SITE ID from CDN OptiPic controll panel
     'domains' => array(), // list of domains should replace to cdn.optipic.io
+    'exclusions_url' => array(), // list of URL exclusions - where is URL should not converted
 );
 ?>

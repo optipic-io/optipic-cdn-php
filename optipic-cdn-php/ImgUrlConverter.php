@@ -23,14 +23,16 @@ class ImgUrlConverter {
     public static $domains = array();
     
     /**
+     * List of URL exclusions - where is URL should not converted
+     */
+    public static $exclusionsUrl = array();
+    
+    /**
      * Constructor
      */
-    public function __construct($siteId=false, $domains=false) {
-        if($siteId!==false) {
-            self::$siteId = $siteId;
-        }
-        if($domains!==false) {
-            self::$domains = $domains;
+    public function __construct($config=array()) {
+        if(is_array($config) && count($config)>0) {
+            self::loadConfig($config);
         }
     }
     
@@ -42,6 +44,10 @@ class ImgUrlConverter {
         // try auto load config from __DIR__.'config.php'
         if(empty(self::$siteId)) {
             self::loadConfig();
+        }
+        
+        if(!self::isEnabled()) {
+            return $content;
         }
         
         $domains = self::$domains;
@@ -80,12 +86,25 @@ class ImgUrlConverter {
         if(is_array($source)) {
             self::$siteId = $source['site_id'];
             self::$domains = $source['domains'];
+            self::$exclusionsUrl = $source['exclusions_url'];
         }
         elseif(file_exists($source)) {
             $config = require($source);
-            self::$siteId = $config['site_id'];
-            self::$domains = $config['domains'];
+            if(is_array($config)) {
+                self::loadConfig($config);
+            }
         }
+    }
+    
+    /**
+     * Check if convertation enabled on current URL
+     */
+    public static function isEnabled() {
+        $url = $_SERVER['REQUEST_URI'];
+        if(in_array($url, self::$exclusionsUrl)) {
+            return false;
+        }
+        return true;
     }
 }
 ?>

@@ -48,10 +48,11 @@ ob_start(array('\optipic\cdn\ImgUrlConverter', 'convertHtml'));
 You may use our lib to convert image URLs exactly where you want in your project to convert whole HTML-block contains image URLs.
 
 ```php
-$converterOptiPic = new \optipic\cdn\ImgUrlConverter(
-    99999999,                                       // your SITE ID from CDN OptiPic controll panel
-    array('mydomain.com', 'www.mydomain.com')       // list of domains should replace to cdn.optipic.io
-);
+$converterOptiPic = new \optipic\cdn\ImgUrlConverter(array(
+    'site_id' => 99999999,                                       // your SITE ID from CDN OptiPic controll panel
+    'domains' => array('mydomain.com', 'www.mydomain.com'),      // list of domains should replace to cdn.optipic.io
+    'exclusions_url' => array('/test/test/index.php',),          // list of URL exclusions - where is URL should not converted
+));
 
 $htmlConverted = $converterOptiPic->convertHtml($html);
 ```
@@ -64,8 +65,9 @@ File format:
 
 ```php
 return array(
-    'site_id' => '0',     // your SITE ID from CDN OptiPic controll panel
-    'domains' => array(), // list of domains should replace to cdn.optipic.io
+    'site_id' => '0',            // your SITE ID from CDN OptiPic controll panel
+    'domains' => array(),        // list of domains should replace to cdn.optipic.io
+    'exclusions_url' => array(), // list of URL exclusions - where is URL should not converted
 );
 ```
 
@@ -82,18 +84,20 @@ ImgUrlConverter::loadConfig('<path-to-your-config-file.php>');
 
 // Load config from array
 ImgUrlConverter::loadConfig(array(
-    'site_id' => '0',     // your SITE ID from CDN OptiPic controll panel
-    'domains' => array(), // list of domains should replace to cdn.optipic.io
+    'site_id' => '0',            // your SITE ID from CDN OptiPic controll panel
+    'domains' => array(),        // list of domains should replace to cdn.optipic.io
+    'exclusions_url' => array(), // list of URL exclusions - where is URL should not converted
 ));
 ```
 
 ### Option #3: Pass config data into ImgUrlConverter::__constructor();
 
 ```php
-$converterOptiPic = new \optipic\cdn\ImgUrlConverter(
-    99999999,                                       // your SITE ID from CDN OptiPic controll panel
-    array('mydomain.com', 'www.mydomain.com')       // list of domains should replace to cdn.optipic.io
-);
+$converterOptiPic = new \optipic\cdn\ImgUrlConverter(array(
+    'site_id' => 99999999,                                       // your SITE ID from CDN OptiPic controll panel
+    'domains' => array('mydomain.com', 'www.mydomain.com'),      // list of domains should replace to cdn.optipic.io
+    'exclusions_url' => array('/test/test/index.php',),          // list of URL exclusions - where is URL should not converted
+));
 ```
 
 ### Option #1: Using file config.php in lib's root
