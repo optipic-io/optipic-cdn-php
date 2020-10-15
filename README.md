@@ -15,13 +15,13 @@ Inlude our `/optipic-cdn-php/auto_prepend_file.php` file in `auto_prepend_file` 
 
 You may do it in `php.ini` or `.htaccess`.
 
-### Example using .htaccess
+### Example using `.htaccess`
 
 ```
 php_value auto_prepend_file "<SITE_ROOT_DIRECTORY>/optipic-cdn-php/optipic-cdn-php/auto_prepend_file.php"
 ```
 
-### Example using php.ini
+### Example using `php.ini` or `.user.ini`
 
 ```
 ; Automatically add files before PHP document.
