@@ -13,7 +13,7 @@ Use `ImgUrlConverter` class to **automatic convert all image URLs on your site**
 
 Inlude our `/optipic-cdn-php/auto_prepend_file.php` file in `auto_prepend_file` php.ini directive.
 
-You may do it in `php.ini` or `.htaccess`.
+You may do it in `.user.ini` or `php.ini` or `.htaccess`.
 
 ### Example using `.htaccess`
 
