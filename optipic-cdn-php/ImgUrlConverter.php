@@ -133,16 +133,19 @@ class ImgUrlConverter {
             if(!is_array(self::$domains)) {
                 self::$domains = array();
             }
+            self::$domains = array_unique(self::$domains);
             
             self::$exclusionsUrl = $source['exclusions_url'];
             if(!is_array(self::$exclusionsUrl)) {
                 self::$exclusionsUrl = array();
             }
+            self::$exclusionsUrl = array_unique(self::$exclusionsUrl);
             
             self::$whitelistImgUrls = $source['whitelist_img_urls'];
             if(!is_array(self::$whitelistImgUrls)) {
                 self::$whitelistImgUrls = array();
             }
+            self::$whitelistImgUrls = array_unique(self::$whitelistImgUrls);
         }
         elseif(file_exists($source)) {
             $config = require($source);
