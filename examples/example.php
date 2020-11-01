@@ -5,6 +5,8 @@ $converterOptiPic = new \optipic\cdn\ImgUrlConverter(array(
     'site_id' => 99999999,                                       // your SITE ID from CDN OptiPic controll panel
     'domains' => array('mydomain.com', 'www.mydomain.com'),      // list of domains should replace to cdn.optipic.io
     'exclusions_url' => array('/test/test/index.php',),          // list of URL exclusions - where is URL should not converted
+    //'whitelist_img_urls' => array('/foo/bar/'),
+    'whitelist_img_urls' => array('/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/foo/bar/im'),
 ));
 
 var_dump(\optipic\cdn\ImgUrlConverter::isEnabled());
@@ -14,6 +16,9 @@ $htmls = array(
     '<img src="/foo/bar/img.png"/>',
     '<img data-src="/foo/bar/img.png"/>',
     "<img foo-bar-attr='/foo/bar/img.png'/>",
+    '<img src="/foo/bar1/img.png"/>',
+    '<img data-src="/foo/bar2/img.png"/>',
+    "<img foo-bar-attr='/foo/bar3/img.png'/>",
     'backhround: url(/foo/bar/img.jpg)',
     'backhround: url("/foo/bar/img.jpg")',
     "backhround: url('/foo/bar/img.jpg')",

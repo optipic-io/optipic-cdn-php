@@ -28,6 +28,11 @@ class ImgUrlConverter {
     public static $exclusionsUrl = array();
     
     /**
+     * Whitelist of images URL - what should to be converted 
+     */
+    public static $whitelistImgUrls = array();
+    
+    /**
      * Constructor
      */
     public function __construct($config=array()) {
@@ -58,7 +63,7 @@ class ImgUrlConverter {
         
         $hostsForRegexp = array();
         foreach($domains as $domain) {
-            $domain = str_replace(".", "\.", $domain);
+            //$domain = str_replace(".", "\.", $domain);
             if($domain && stripos($domain, 'http://')!==0 && stripos($domain, 'https://')!==0) {
                 $hostsForRegexp[] = 'http://'.$domain;
                 $hostsForRegexp[] = 'https://'.$domain;
@@ -69,7 +74,45 @@ class ImgUrlConverter {
             
         }
         foreach($hostsForRegexp as $host) {
-            $content = preg_replace('#("|\'|\()'.$host.'(/[^/"\'\s]{1}[^"\']*\.(png|jpg|jpeg){1}(\?.*?)?)("|\'|\))#simS', '${1}//cdn.optipic.io/site-'.self::$siteId.'${2}${5}', $content);
+            
+            /*$firstPartsOfUrl = array();
+            foreach(self::$whitelistImgUrls as $whiteImgUrl) {
+                if(substr($whiteImgUrl, -1, 1)=='/') {
+                    $whiteImgUrl = substr($whiteImgUrl, 0, -1);
+                }
+                $firstPartsOfUrl[] = preg_quote($host.$whiteImgUrl, '#');
+            }
+            if(count($firstPartsOfUrl)==0) {
+                $firstPartsOfUrl[] = preg_quote($host, '#');
+            }
+            //var_dump($firstPartsOfUrl);
+            //$host = preg_quote($host, '#');
+            //var_dump(self::$whitelistImgUrls);
+            
+            $host = implode('|', $firstPartsOfUrl);
+            var_dump($host);*/
+            
+            /*$firstPartsOfUrl = array();
+            foreach(self::$whitelistImgUrls as $whiteImgUrl) {
+                $firstPartsOfUrl[] = preg_quote($whiteImgUrl, '#');
+            }
+            if(empty($firstPartsOfUrl)) {
+                $firstPartsOfUrl = array('/');
+            }
+            
+            $firstPartOfUrl = implode('|', $firstPartsOfUrl);
+            */
+            
+            $host = preg_quote($host, '#');
+            
+            $firstPartOfUrl = '/';
+            
+            $regexp = '#("|\'|\()'.$host.'('.$firstPartOfUrl.'[^/"\'\s]{1}[^"\']*\.(png|jpg|jpeg){1}(\?.*?)?)("|\'|\))#simS';
+            //$regexp = str_replace('//', '/');
+            
+            //$content = preg_replace($regexp, '${1}//cdn.optipic.io/site-'.self::$siteId.'${2}${5}', $content);
+            $content = preg_replace_callback($regexp, array(__NAMESPACE__ .'\ImgUrlConverter', 'callbackForPregReplace'), $content);
+            
         }
         
         return $content;
@@ -85,8 +128,21 @@ class ImgUrlConverter {
         
         if(is_array($source)) {
             self::$siteId = $source['site_id'];
+            
             self::$domains = $source['domains'];
+            if(!is_array(self::$domains)) {
+                self::$domains = array();
+            }
+            
             self::$exclusionsUrl = $source['exclusions_url'];
+            if(!is_array(self::$exclusionsUrl)) {
+                self::$exclusionsUrl = array();
+            }
+            
+            self::$whitelistImgUrls = $source['whitelist_img_urls'];
+            if(!is_array(self::$whitelistImgUrls)) {
+                self::$whitelistImgUrls = array();
+            }
         }
         elseif(file_exists($source)) {
             $config = require($source);
@@ -105,6 +161,33 @@ class ImgUrlConverter {
             return false;
         }
         return true;
+    }
+    
+    /**
+     * Callback-function for preg_replace() to replace image URLs
+     */
+    public static function callbackForPregReplace($matches) {
+        $urlOriginal = $matches[2];
+        
+        $replaceWithoutOptiPic = $matches[0];
+        $replaceWithOptiPic = $matches[1].'//cdn.optipic.io/site-'.self::$siteId.$urlOriginal.$matches[5];
+        
+        if(empty(self::$whitelistImgUrls)) {
+            return $replaceWithOptiPic;
+        }
+        
+        if(in_array($urlOriginal, self::$whitelistImgUrls)) {
+            return $replaceWithOptiPic;
+        }
+        
+        foreach(self::$whitelistImgUrls as $whiteUrl) {
+            if(strpos($urlOriginal, $whiteUrl)===0) {
+                return $replaceWithOptiPic;
+            }
+        }
+        
+        return $replaceWithoutOptiPic;
+        
     }
 }
 ?>
