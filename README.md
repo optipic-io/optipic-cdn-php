@@ -9,6 +9,13 @@ Use `ImgUrlConverter` class to **automatic convert all image URLs on your site**
 1. Download this lib to your site.
 1. Use this library according use cases below
 
+## Administration area to install lib and configure it
+After downloaded all code of this repository you may open admin area in your browser:
+
+https://mydomain.com/optipic-cdn-php/admin/admin.php?key=b9k7o34rnfc5kco6m7fmjrts7u
+![cdn optipic admin area](https://cdn.optipic.io/site-520/img/cdn/optipic-cdn-php-admin-area-screen-1.png)
+
+
 ## Use case #1: Automatic convert image URLs using 'auto_prepend_file' php-directive
 
 Inlude our `/optipic-cdn-php/auto_prepend_file.php` file in `auto_prepend_file` php.ini directive.
