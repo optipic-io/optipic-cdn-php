@@ -32,6 +32,12 @@ class ImgUrlConverter {
      */
     public static $whitelistImgUrls = array();
     
+    public static $configFullPath = '';
+    
+    public static $adminKey = '';
+    
+    public static $srcsetAttrs = array();
+    
     /**
      * Constructor
      */
@@ -107,7 +113,21 @@ class ImgUrlConverter {
             
             $firstPartOfUrl = '/';
             
-            $regexp = '#("|\'|\()'.$host.'('.$firstPartOfUrl.'[^/"\'\s]{1}[^"\']*\.(png|jpg|jpeg){1}(\?.*?)?)("|\'|\))#simS';
+            // --------------------------------------------
+            // <img srcset="">
+            // @see https://developer.mozilla.org/ru/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images
+            if(!empty(self::$srcsetAttrs)) {
+                // srcset|data-srcset|data-wpfc-original-srcset
+                $srcSetAttrsRegexp = array();
+                foreach(self::$srcsetAttrs as $attr) {
+                    $srcSetAttrsRegexp[] = preg_quote($attr, '#');
+                }
+                $srcSetAttrsRegexp = implode('|', $srcSetAttrsRegexp);
+                $content = preg_replace_callback('#<(?P<tag>[^\s]+)(?P<prefix>.*?)\s+(?P<attr>'.$srcSetAttrsRegexp.')=(?P<quote1>"|\')(?P<set>[^"]+?)(?P<quote2>"|\')(?P<suffix>[^>]*?)>#iS', array(__NAMESPACE__ .'\ImgUrlConverter', 'callbackForPregReplaceSrcset'), $content);
+            }
+            // --------------------------------------------
+            
+            $regexp = '#("|\'|\()'.$host.'('.$firstPartOfUrl.'[^/"\'\s]{1}[^"\']*\.(png|jpg|jpeg){1}(\?.*?)?)("|\'|\))#siS';
             //$regexp = str_replace('//', '/');
             
             //$content = preg_replace($regexp, '${1}//cdn.optipic.io/site-'.self::$siteId.'${2}${5}', $content);
@@ -146,10 +166,21 @@ class ImgUrlConverter {
                 self::$whitelistImgUrls = array();
             }
             self::$whitelistImgUrls = array_unique(self::$whitelistImgUrls);
+            
+            self::$srcsetAttrs = $source['srcset_attrs'];
+            if(!is_array(self::$srcsetAttrs)) {
+                self::$srcsetAttrs = array();
+            }
+            self::$srcsetAttrs = array_unique(self::$srcsetAttrs);
+            
+            
+            
+            self::$adminKey = $source['admin_key'];
         }
         elseif(file_exists($source)) {
             $config = require($source);
             if(is_array($config)) {
+                self::$configFullPath = $source;
                 self::loadConfig($config);
             }
         }
@@ -170,6 +201,7 @@ class ImgUrlConverter {
      * Callback-function for preg_replace() to replace image URLs
      */
     public static function callbackForPregReplace($matches) {
+        //var_dump($matches);
         $urlOriginal = $matches[2];
         
         $replaceWithoutOptiPic = $matches[0];
@@ -191,6 +223,36 @@ class ImgUrlConverter {
         
         return $replaceWithoutOptiPic;
         
+    }
+    
+    /**
+     * Callback-function for preg_replace() to replace "srcset" attributes
+     */
+    public static function callbackForPregReplaceSrcset($matches) {
+        $isConverted = false;
+        $originalContent = $matches[0];
+        
+        $listConverted = array();
+        
+        $list = explode(",", $matches['set']);
+        foreach($list as $item) {
+            $source = preg_split("/[\s,]+/siS", trim($item));
+            $url = trim($source[0]);
+            $size = trim($source[1]);
+            $toConvertUrl = "(".$url.")";
+            $convertedUrl = self::convertHtml($toConvertUrl);
+            if($toConvertUrl!=$convertedUrl) {
+                $isConverted = true;
+                $listConverted[] = trim(substr($convertedUrl, 1, -1).' '.$size);
+            }
+        }
+        
+        if($isConverted) {
+            return '<'.$matches['tag'].$matches['prefix'].' '.$matches['attr'].'='.$matches['quote1'].implode(", ", $listConverted).$matches['quote2'].$matches['suffix'].'>';
+        }
+        else {
+            return $originalContent;
+        }
     }
 }
 ?>
