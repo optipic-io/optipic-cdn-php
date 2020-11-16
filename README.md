@@ -60,6 +60,7 @@ $converterOptiPic = new \optipic\cdn\ImgUrlConverter(array(
     'domains' => array('mydomain.com', 'www.mydomain.com'),      // list of domains should replace to cdn.optipic.io
     'exclusions_url' => array('/test/test/index.php',),          // list of URL exclusions - where is URL should not converted
     'whitelist_img_urls' => array(),                             // whitelist of images URL - what should to be converted (parts or full urls start from '/')
+    'srcset_attrs' => array('srcset', 'data-srcset'),            // tag's srcset attributes // @see https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images
 ));
 
 $htmlConverted = $converterOptiPic->convertHtml($html);
@@ -77,6 +78,7 @@ return array(
     'domains' => array(),            // list of domains should replace to cdn.optipic.io
     'exclusions_url' => array(),     // list of URL exclusions - where is URL should not converted
     'whitelist_img_urls' => array(), // whitelist of images URL - what should to be converted (parts or full urls start from '/')
+    'srcset_attrs' => array('srcset', 'data-srcset'), // tag's srcset attributes // @see https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images
 );
 ```
 
@@ -97,6 +99,7 @@ ImgUrlConverter::loadConfig(array(
     'domains' => array(),            // list of domains should replace to cdn.optipic.io
     'exclusions_url' => array(),     // list of URL exclusions - where is URL should not converted
     'whitelist_img_urls' => array(), // whitelist of images URL - what should to be converted (parts or full urls start from '/')
+    'srcset_attrs' => array('srcset', 'data-srcset'), // tag's srcset attributes // @see https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images
 ));
 ```
 
