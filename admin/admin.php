@@ -336,7 +336,7 @@ auto_prepend_file = <?=$pathToPrependFileRight?></pre>
                 <pre><?=$_SERVER['DOCUMENT_ROOT']?></pre>
 
                 <h4 class="mt-3"><?=Lang::t(9)?> auto_prepend_file</h4>
-                <pre><?=$pathToClass?></pre>
+                <pre><?=$pathToPrependFileRight?></pre>
             </div>
             
             <div class="tab-pane <?if($isOk):?>active<?endif;?>" id="tabConfig" role="tabpanel">
