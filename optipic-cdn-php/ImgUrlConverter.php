@@ -175,8 +175,9 @@ class ImgUrlConverter {
             self::$srcsetAttrs = array_unique(self::$srcsetAttrs);
             
             
-            
-            self::$adminKey = $source['admin_key'];
+            if(isset($source['admin_key'])) {
+                self::$adminKey = $source['admin_key'];
+            }
         }
         elseif(file_exists($source)) {
             $config = require($source);
@@ -239,7 +240,7 @@ class ImgUrlConverter {
         foreach($list as $item) {
             $source = preg_split("/[\s,]+/siS", trim($item));
             $url = trim($source[0]);
-            $size = trim($source[1]);
+            $size = (isset($source[1]))? trim($source[1]): '';
             $toConvertUrl = "(".$url.")";
             $convertedUrl = self::convertHtml($toConvertUrl);
             if($toConvertUrl!=$convertedUrl) {
