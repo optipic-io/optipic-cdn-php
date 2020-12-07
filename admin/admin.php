@@ -4,7 +4,7 @@ include_once __DIR__.'/Lang.php';
 
 use \optipic\cdn\Lang;
 
-Lang::init(__FILE__, $_GET['lang']);
+Lang::init(__FILE__, (!empty($_GET['lang'])? $_GET['lang']: false));
 
 $classExists = class_exists('\optipic\cdn\ImgUrlConverter');
 
@@ -167,7 +167,7 @@ if(!empty($_GET['find_variant'])) {
 <html lang="en">
 
 <head>
-    <title><?=Lang::t('title')?></title>
+    <title><?php echo Lang::t('title')?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
@@ -224,67 +224,67 @@ if(!empty($_GET['find_variant'])) {
 
     <div class="container">
         <div class="text-center">
-            <a class="navbar-brand" href="https://optipic.io/<?=Lang::$lang?>/cdn/" target="_blank">
+            <a class="navbar-brand" href="https://optipic.io/<?php echo Lang::$lang?>/cdn/" target="_blank">
                 <img src="https://optipic.io/optipic-logo.png" class="d-inline-block align-top" alt="" loading="lazy">
             </a>
         </div>
         <div class="text-center">
-        <?foreach(Lang::$langs as $l):?>
-            <a href="?lang=<?=$l?>&key=<?=$currentKey?>" class="btn btn-outline-dark btn-sm"><?=strtoupper($l)?></a>
-        <?endforeach;?>
-            <a href="https://github.com/optipic-io/optipic-cdn-php" target="_blank" class="btn btn-outline-dark btn-sm"><?=Lang::t('lib_on_github')?></a>
+        <?php foreach(Lang::$langs as $l): ?>
+            <a href="?lang=<?php echo $l?>&key=<?php echo $currentKey?>" class="btn btn-outline-dark btn-sm"><?php echo strtoupper($l)?></a>
+        <?php endforeach; ?>
+            <a href="https://github.com/optipic-io/optipic-cdn-php" target="_blank" class="btn btn-outline-dark btn-sm"><?php echo Lang::t('lib_on_github')?></a>
         </div>
         
-        <h1 class="text-center mt-3"><?=Lang::t('title')?> <a href="https://optipic.io/<?=Lang::$lang?>/cdn/" target="_blank">CDN OptiPic</a></h1>
+        <h1 class="text-center mt-3"><?php echo Lang::t('title')?> <a href="https://optipic.io/<?php echo Lang::$lang?>/cdn/" target="_blank">CDN OptiPic</a></h1>
         
         <ul id="tabs-list" class="nav nav-tabs mt-3" role="tablist">
             <li class="nav-item">
-                <a class="nav-link <?if(!$isOk):?>active<?endif;?>" id="tab-install" data-toggle="tab" href="#tabInstall" role="tab" aria-selected="true">
-                    <?=Lang::t('tab_install')?>
-                    <?if($isOk):?>
-                    <span class="badge badge-info"><?=Lang::t('installed')?></span>
-                    <?endif;?>
+                <a class="nav-link <?php if(!$isOk):?>active<?php endif;?>" id="tab-install" data-toggle="tab" href="#tabInstall" role="tab" aria-selected="true">
+                    <?php echo Lang::t('tab_install')?>
+                    <?php if($isOk):?>
+                    <span class="badge badge-info"><?php echo Lang::t('installed')?></span>
+                    <?php endif;?>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link <?if($isOk):?>active<?endif;?>" data-toggle="tab" href="#tabConfig" role="tab"><?=Lang::t('tab_config')?></a>
+                <a class="nav-link <?php if($isOk):?>active<?php endif;?>" data-toggle="tab" href="#tabConfig" role="tab"><?php echo Lang::t('tab_config')?></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#tabPhpInfo" role="tab"><?=Lang::t('tab_phpinfo')?></a>
+                <a class="nav-link" data-toggle="tab" href="#tabPhpInfo" role="tab"><?php echo Lang::t('tab_phpinfo')?></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#tabSupport" role="tab"><?=Lang::t('tab_support')?></a>
+                <a class="nav-link" data-toggle="tab" href="#tabSupport" role="tab"><?php echo Lang::t('tab_support')?></a>
             </li>
         </ul>
         
         <div class="tab-content mt-3 mb-5">
-            <div class="tab-pane <?if(!$isOk):?>active<?endif;?>" id="tabInstall" role="tabpanel">
+            <div class="tab-pane <?php if(!$isOk):?>active<?php endif;?>" id="tabInstall" role="tabpanel">
 
-                <h2 class="text-center mb-5"><?=Lang::t(4)?>: 
-                    <span class="<?=$successCssClasses[intval($isOk)]?>">
-                    <?=($isOk? Lang::t(2): Lang::t(3))?>
+                <h2 class="text-center mb-5"><?php echo Lang::t(4)?>: 
+                    <span class="<?php echo $successCssClasses[intval($isOk)]?>">
+                    <?php echo ($isOk? Lang::t(2): Lang::t(3))?>
                     </span>
                 </h2>
 
                 <h2>
-                    <?=Lang::t(5)?>
-                    <small class="text-muted"><?=Lang::t('5_small')?></small>
+                    <?php echo Lang::t(5)?>
+                    <small class="text-muted"><?php echo Lang::t('5_small')?></small>
                 </h2>
                 
                 <div class="accordion" id="accordionInstall">
                     <div class="card">
                         <div class="card-header collapsed" id="install-htaccess-head" type="button" data-toggle="collapse" data-target="#install-htaccess-collapse" aria-expanded="true" aria-controls="install-htaccess-collapse">
                             <h3>
-                                <?=Lang::t(6)?> <code>.htaccess</code> <span id="htaccess-pass" class="badge badge-success d-none"><?=Lang::t(0)?></span>
+                                <?php echo Lang::t(6)?> <code>.htaccess</code> <span id="htaccess-pass" class="badge badge-success d-none"><?php echo Lang::t(0)?></span>
                             </h3>
-                            <span class="badge show-details"><?=Lang::t('show_instructions')?></span>
-                            <span class="badge hide-details"><?=Lang::t('hide_instructions')?></span>
+                            <span class="badge show-details"><?php echo Lang::t('show_instructions')?></span>
+                            <span class="badge hide-details"><?php echo Lang::t('hide_instructions')?></span>
                         </div>
                         <div id="install-htaccess-collapse" class="collapse" aria-labelledby="install-htaccess-head" data-parent="#accordionInstall">
                             <div class="card-body">
-                                <p><?=Lang::t(11)?> <code><?=$_SERVER['DOCUMENT_ROOT']?>/.htaccess</code>:</p>
-                                <pre>php_value auto_prepend_file "<?=$pathToPrependFileRight?>"</pre>
-                                <p><small><?=Lang::t(12)?></small></p>
+                                <p><?php echo Lang::t(11)?> <code><?php echo $_SERVER['DOCUMENT_ROOT']?>/.htaccess</code>:</p>
+                                <pre>php_value auto_prepend_file "<?php echo $pathToPrependFileRight?>"</pre>
+                                <p><small><?php echo Lang::t(12)?></small></p>
                             </div>
                         </div>
                     </div>
@@ -292,19 +292,19 @@ if(!empty($_GET['find_variant'])) {
                     <div class="card mt-3">
                         <div class="card-header collapsed" id="install-userini-head" type="button" data-toggle="collapse" data-target="#install-userini-collapse" aria-expanded="true" aria-controls="install-userini-collapse">
                             <h3>
-                                <?=Lang::t(6)?> <code>.user.ini</code> <span id="user-ini-pass" class="badge badge-success d-none"><?=Lang::t(0)?></span>
+                                <?php echo Lang::t(6)?> <code>.user.ini</code> <span id="user-ini-pass" class="badge badge-success d-none"><?php echo Lang::t(0)?></span>
                             </h3>
-                            <span class="badge show-details"><?=Lang::t('show_instructions')?></span>
-                            <span class="badge hide-details"><?=Lang::t('hide_instructions')?></span>
+                            <span class="badge show-details"><?php echo Lang::t('show_instructions')?></span>
+                            <span class="badge hide-details"><?php echo Lang::t('hide_instructions')?></span>
                         </div>
                         <div id="install-userini-collapse" class="collapse" aria-labelledby="install-userini-head" data-parent="#accordionInstall">
                             <div class="card-body">
-                                <p><?=Lang::t(11)?> <code><?=$_SERVER['DOCUMENT_ROOT']?>/.user.ini</code>:</p>
+                                <p><?php echo Lang::t(11)?> <code><?php echo $_SERVER['DOCUMENT_ROOT']?>/.user.ini</code>:</p>
                                 <pre>
 ; Automatically add files before PHP document.
 ; http://php.net/auto-prepend-file
-auto_prepend_file = <?=$pathToPrependFileRight?></pre>
-                                <p><small><?=Lang::t(12)?></small></p>
+auto_prepend_file = <?php echo $pathToPrependFileRight?></pre>
+                                <p><small><?php echo Lang::t(12)?></small></p>
                             </div>
                         </div>
                     </div>
@@ -312,116 +312,116 @@ auto_prepend_file = <?=$pathToPrependFileRight?></pre>
                     <div class="card mt-3">
                         <div class="card-header collapsed" id="install-phpini-head" type="button" data-toggle="collapse" data-target="#install-phpini-collapse" aria-expanded="true" aria-controls="install-phpini-collapse">
                             <h3>
-                                <?=Lang::t(6)?> <code>php.ini</code> <span id="php-ini-pass" class="badge badge-success d-none"><?=Lang::t(0)?></span>
+                                <?php echo Lang::t(6)?> <code>php.ini</code> <span id="php-ini-pass" class="badge badge-success d-none"><?php echo Lang::t(0)?></span>
                             </h3>
-                            <span class="badge show-details"><?=Lang::t('show_instructions')?></span>
-                            <span class="badge hide-details"><?=Lang::t('hide_instructions')?></span>
+                            <span class="badge show-details"><?php echo Lang::t('show_instructions')?></span>
+                            <span class="badge hide-details"><?php echo Lang::t('hide_instructions')?></span>
                         </div>
                         <div id="install-phpini-collapse" class="collapse" aria-labelledby="install-phpini-head" data-parent="#accordionInstall">
                             <div class="card-body">
-                                <p><?=Lang::t(11)?> <code><?=$_SERVER['DOCUMENT_ROOT']?>/php.ini</code>:</p>
+                                <p><?php echo Lang::t(11)?> <code><?php echo $_SERVER['DOCUMENT_ROOT']?>/php.ini</code>:</p>
                                 <pre>
 ; Automatically add files before PHP document.
 ; http://php.net/auto-prepend-file
-auto_prepend_file = <?=$pathToPrependFileRight?></pre>
-                                <p><small><?=Lang::t(12)?></small></p>
+auto_prepend_file = <?php echo $pathToPrependFileRight?></pre>
+                                <p><small><?php echo Lang::t(12)?></small></p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <h2 class="mt-5"><?=Lang::t(7)?></h2>
+                <h2 class="mt-5"><?php echo Lang::t(7)?></h2>
 
-                <h4 class="mt-3"><?=Lang::t(8)?></h4>
-                <pre><?=$_SERVER['DOCUMENT_ROOT']?></pre>
+                <h4 class="mt-3"><?php echo Lang::t(8)?></h4>
+                <pre><?php echo $_SERVER['DOCUMENT_ROOT']?></pre>
 
-                <h4 class="mt-3"><?=Lang::t(9)?> auto_prepend_file</h4>
-                <pre><?=$pathToPrependFileRight?></pre>
+                <h4 class="mt-3"><?php echo Lang::t(9)?> auto_prepend_file</h4>
+                <pre><?php echo $pathToPrependFileRight?></pre>
             </div>
             
-            <div class="tab-pane <?if($isOk):?>active<?endif;?>" id="tabConfig" role="tabpanel">
+            <div class="tab-pane <?php if($isOk):?>active<?php endif;?>" id="tabConfig" role="tabpanel">
                 
-                <?if(!$classExists):?>
+                <?php if(!$classExists):?>
                 <div class="alert alert-danger" role="alert">
-                    <?=Lang::t('error_no_class')?>
+                    <?php echo Lang::t('error_no_class')?>
                 </div>
                 <div class="text-center text-muted">
-                    <?=Lang::t('no_form')?>
+                    <?php echo Lang::t('no_form')?>
                 </div>
-                <?else:?>
+                <?php else:?>
                 <form method="post" class="optipic-settings">
                     
                     <div class="form-group">
-                        <label for="optipic_admin_key"><?=Lang::t('admin_key')?></label>
-                        <input type="text" name="optipicConfig[admin_key]" class="form-control" id="optipic_admin_key" aria-describedby="optipic_admin_key_help" value="<?=$config['admin_key']?>">
-                        <?if($currentKey==DEF_KEY):?>
-                        <small id="optipic_admin_key_help" class="form-text text-danger"><?=Lang::t('admin_key_helper')?></small>
-                        <?endif;?>
+                        <label for="optipic_admin_key"><?php echo Lang::t('admin_key')?></label>
+                        <input type="text" name="optipicConfig[admin_key]" class="form-control" id="optipic_admin_key" aria-describedby="optipic_admin_key_help" value="<?php echo $config['admin_key']?>">
+                        <?php if($currentKey==DEF_KEY):?>
+                        <small id="optipic_admin_key_help" class="form-text text-danger"><?php echo Lang::t('admin_key_helper')?></small>
+                        <?php endif;?>
                     </div>
                 
                     <div class="form-group">
-                        <label for="optipic_site_id"><?=Lang::t('sid')?></label>
-                        <input type="number" name="optipicConfig[site_id]" class="form-control" id="optipic_site_id" aria-describedby="optipic_site_id_help" value="<?=$config['site_id']?>">
-                        <small id="optipic_site_id_help" class="form-text text-muted"><?=Lang::t('sid_helper')?></small>
+                        <label for="optipic_site_id"><?php echo Lang::t('sid')?></label>
+                        <input type="number" name="optipicConfig[site_id]" class="form-control" id="optipic_site_id" aria-describedby="optipic_site_id_help" value="<?php echo $config['site_id']?>">
+                        <small id="optipic_site_id_help" class="form-text text-muted"><?php echo Lang::t('sid_helper')?></small>
                     </div>
                     
                     <div class="form-group">
-                        <label for="optipic_domains"><?=Lang::t('domains')?></label>
-                        <textarea name="optipicConfig[domains]" class="form-control" id="optipic_domains" rows="3"><?=implode("\n", $config['domains'])?></textarea>
+                        <label for="optipic_domains"><?php echo Lang::t('domains')?></label>
+                        <textarea name="optipicConfig[domains]" class="form-control" id="optipic_domains" rows="3"><?php echo implode("\n", $config['domains'])?></textarea>
                         <small id="emailHelp" class="form-text text-muted">
-                            <?=Lang::t('domains_helper')?>
-                            <?=Lang::t('examples:')?><br/>
+                            <?php echo Lang::t('domains_helper')?>
+                            <?php echo Lang::t('examples:')?><br/>
                             mydomain.com<br/>
                             www.mydomain.com
                         </small>
                     </div>
                     
                     <div class="form-group">
-                        <label for="optipic_exclusions_url"><?=Lang::t('exclusions_url')?></label>
-                        <textarea name="optipicConfig[exclusions_url]" class="form-control" id="optipic_exclusions_url" rows="3"><?=implode("\n", $config['exclusions_url'])?></textarea>
+                        <label for="optipic_exclusions_url"><?php echo Lang::t('exclusions_url')?></label>
+                        <textarea name="optipicConfig[exclusions_url]" class="form-control" id="optipic_exclusions_url" rows="3"><?php echo implode("\n", $config['exclusions_url'])?></textarea>
                         <small id="emailHelp" class="form-text text-muted">
-                            <?=Lang::t('exclusions_url_helper')?>
+                            <?php echo Lang::t('exclusions_url_helper')?>
                         </small>
                     </div>
                     
                     <div class="form-group">
-                        <label for="optipic_whitelist_img_urls"><?=Lang::t('whitelist_img_urls')?></label>
-                        <textarea name="optipicConfig[whitelist_img_urls]" class="form-control" id="optipic_whitelist_img_urls" rows="3"><?=implode("\n", $config['whitelist_img_urls'])?></textarea>
+                        <label for="optipic_whitelist_img_urls"><?php echo Lang::t('whitelist_img_urls')?></label>
+                        <textarea name="optipicConfig[whitelist_img_urls]" class="form-control" id="optipic_whitelist_img_urls" rows="3"><?php echo implode("\n", $config['whitelist_img_urls'])?></textarea>
                         <small id="emailHelp" class="form-text text-muted">
-                            <?=Lang::t('whitelist_img_urls_helper')?>
-                            <?=Lang::t('examples:')?><br/>
+                            <?php echo Lang::t('whitelist_img_urls_helper')?>
+                            <?php echo Lang::t('examples:')?><br/>
                             /upload/<br/>
                             /upload/test.jpeg
                         </small>
                     </div>
                     
                     <div class="form-group">
-                        <label for="optipic_srcset_attrs"><?=Lang::t('srcset_attrs')?></label>
-                        <textarea name="optipicConfig[srcset_attrs]" class="form-control" id="optipic_srcset_attrs" rows="3"><?=implode("\n", $config['srcset_attrs'])?></textarea>
+                        <label for="optipic_srcset_attrs"><?php echo Lang::t('srcset_attrs')?></label>
+                        <textarea name="optipicConfig[srcset_attrs]" class="form-control" id="optipic_srcset_attrs" rows="3"><?php echo implode("\n", $config['srcset_attrs'])?></textarea>
                         <small id="emailHelp" class="form-text text-muted">
-                            <?=Lang::t('srcset_attrs_helper')?><br/>
-                            <a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images" target="_blank"><?=Lang::t('srcset_definition')?></a><br/>
-                            <?=Lang::t('examples:')?><br/>
+                            <?php echo Lang::t('srcset_attrs_helper')?><br/>
+                            <a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images" target="_blank"><?php echo Lang::t('srcset_definition')?></a><br/>
+                            <?php echo Lang::t('examples:')?><br/>
                             srcset<br/>
                             data-srcset
                         </small>
                     </div>
                     
                     <div class="form-group text-center">
-                        <button type="submit" class="btn btn-primary btn-lg"><?=Lang::t('submit')?></button>
+                        <button type="submit" class="btn btn-primary btn-lg"><?php echo Lang::t('submit')?></button>
                         <div class="small text-muted mt-1">
-                            <?=Lang::t('cfg_path')?>:<br/>
-                            <code><?=$configFullPath?></code>
+                            <?php echo Lang::t('cfg_path')?>:<br/>
+                            <code><?php echo $configFullPath?></code>
                         </div>
                     </div>
                 </form>
-                <?endif;?>
+                <?php endif;?>
             </div>
             <div class="tab-pane" id="tabPhpInfo" role="tabpanel">
-                <?=phpinfo();?>
+                <?php echo phpinfo();?>
             </div>
             <div class="tab-pane text-center" id="tabSupport" role="tabpanel">
-                <a href="https://optipic.io/get-free-help/?cdn=1" target="_blank" class="btn btn-primary btn-lg"><?=Lang::t('get_support')?></a>
+                <a href="https://optipic.io/get-free-help/?cdn=1" target="_blank" class="btn btn-primary btn-lg"><?php echo Lang::t('get_support')?></a>
             </div>
         </div>
         
@@ -430,7 +430,7 @@ auto_prepend_file = <?=$pathToPrependFileRight?></pre>
         
     </div>
 
-<?if(!$isOk):?>
+<?php if(!$isOk):?>
 <script>
 $(function() {
     $("#tab-install").click(function() {
@@ -459,7 +459,7 @@ $(function() {
     $("#tab-install").trigger("click");
 });
 </script>
-<?endif;?>
+<?php endif;?>
     
 </body>
 </html>

@@ -52,6 +52,10 @@ class ImgUrlConverter {
      */
     public static function convertHtml($content) {
         
+        //ini_set('pcre.backtrack_limit', 100000000);
+        
+        $content = self::removeBomFromUtf($content);
+        
         // try auto load config from __DIR__.'config.php'
         if(empty(self::$siteId)) {
             self::loadConfig();
@@ -60,6 +64,18 @@ class ImgUrlConverter {
         if(!self::isEnabled()) {
             return $content;
         }
+        
+        $gziped = false;
+        if(self::isGz($content)) {
+            if($contentUngzip = gzdecode($content)) {
+                $gziped = true;
+                $content = $contentUngzip;
+            }
+        }
+        
+        //if(self::isBinary($content)) {
+        //    return $content;
+        //}
         
         $domains = self::$domains;
         if(!is_array($domains)) {
@@ -124,7 +140,10 @@ class ImgUrlConverter {
                 }
                 $srcSetAttrsRegexp = implode('|', $srcSetAttrsRegexp);
                 //$content = preg_replace_callback('#<(?P<tag>[^\s]+)(?P<prefix>.*?)\s+(?P<attr>'.$srcSetAttrsRegexp.')=(?P<quote1>"|\')(?P<set>[^"]+?)(?P<quote2>"|\')(?P<suffix>[^>]*?)>#siS', array(__NAMESPACE__ .'\ImgUrlConverter', 'callbackForPregReplaceSrcset'), $content);
-                $content = preg_replace_callback('#<(?P<tag>source|img|picture?)(?P<prefix>.*?)\s+(?P<attr>'.$srcSetAttrsRegexp.')=(?P<quote1>"|\')(?P<set>[^"]+?)(?P<quote2>"|\')(?P<suffix>[^>]*?)>#siS', array(__NAMESPACE__ .'\ImgUrlConverter', 'callbackForPregReplaceSrcset'), $content);
+                $contentAfterReplace = preg_replace_callback('#<(?P<tag>source|img|picture)(?P<prefix>[^>]*)\s+(?P<attr>'.$srcSetAttrsRegexp.')=(?P<quote1>"|\')(?P<set>[^"\']+?)(?P<quote2>"|\')(?P<suffix>[^>]*)>#siS', array(__NAMESPACE__ .'\ImgUrlConverter', 'callbackForPregReplaceSrcset'), $content);
+                if(!empty($contentAfterReplace)) {
+                    $content = $contentAfterReplace;
+                }
             }
             // --------------------------------------------
             
@@ -132,8 +151,15 @@ class ImgUrlConverter {
             //$regexp = str_replace('//', '/');
             
             //$content = preg_replace($regexp, '${1}//cdn.optipic.io/site-'.self::$siteId.'${2}${5}', $content);
-            $content = preg_replace_callback($regexp, array(__NAMESPACE__ .'\ImgUrlConverter', 'callbackForPregReplace'), $content);
+            $contentAfterReplace = preg_replace_callback($regexp, array(__NAMESPACE__ .'\ImgUrlConverter', 'callbackForPregReplace'), $content);
+            if(!empty($contentAfterReplace)) {
+                $content = $contentAfterReplace;
+            }
             
+        }
+        
+        if($gziped) {
+            $content = gzencode($content);
         }
         
         return $content;
@@ -255,6 +281,27 @@ class ImgUrlConverter {
         else {
             return $originalContent;
         }
+    }
+    
+    /*public static function isBinary($str) {
+        return preg_match('~[^\x20-\x7E\t\r\n]~', $str) > 0;
+    }*/
+    
+    /**
+     * Remove UTF-8 BOM-symbol from text
+     */
+    public static function removeBomFromUtf($text) {
+        $bom = pack('H*','EFBBBF');
+        $text = preg_replace("/^$bom/", '', $text);
+        return $text;
+    }
+    
+    /**
+     * Check if gziped data
+     */
+    public static function isGz($str) {
+        if (strlen($str) < 2) return false;
+        return (ord(substr($str, 0, 1)) == 0x1f && ord(substr($str, 1, 1)) == 0x8b);
     }
 }
 ?>

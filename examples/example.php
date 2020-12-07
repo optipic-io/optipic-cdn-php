@@ -52,6 +52,7 @@ $htmls = array(
     </picture>',
     '<img src="/тест/кириллицы/картинка.png"/>',
     '<img data-src="https://mydomain.com/тест/кириллицы/картинка.png"/>',
+    '<div class="grid-item  grid-item-v2" style="background-image: url(/wp-content/uploads/2020/07/type_apart.jpg)"></div>'
 );
 
 $results = array();
