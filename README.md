@@ -156,3 +156,8 @@ https://www.reg.ru/support/hosting-i-servery/yazyki-programmirovaniya-i-skripty/
 
 If it does not work you also may create/edit file `.user.ini` in the site's root directory - alternative of php.ini file.
 https://www.php.net/manual/en/configuration.file.per-user.php
+
+## `ionCube` Warning
+If you use ionCube on your site you shouldn't add `auto_prepend_file` direcive in php settings.  
+The `ionCube` does not support the directive `auto_prepend_file` and [throws an error](https://www.ioncube.com/sa/gui_docs/settings_restrictions.html).  
+Instead, add the OptiPic connection directly to your site's entry point (usually an index.php) as stated above.
