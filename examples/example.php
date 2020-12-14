@@ -10,6 +10,22 @@ $converterOptiPic = new \optipic\cdn\ImgUrlConverter(/*array(
     //'whitelist_img_urls' => array('/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/foo/bar/im'),
 )*/);
 
+$html = <<<HTML
+<!DOCTYPE html> <html dir="ltr" prefix="og: http://ogp.me/ns#" lang="ru"> <head> <base asd href='https://test.com/test"> <base asd href='https://test.com/test"> <meta http-equiv="X-UA-Compatible" content="IE=edge"/> <meta name="yandex-verification" content="a74333f59aaa0616" /> <title>test</title> <meta name="description" content="test"> <meta name="keywords" content="test">
+					<style>
+		@font-face {
+		  font-family: 'PT Sans';
+		  font-style: normal;
+		  font-display: swap;
+		  font-weight: 400;
+		  src: local('PT Sans'), local('PTSans-Regular'),
+			   url('fonts/pt-sans-v11-latin_cyrillic-regular.woff2') format('woff2'), 
+			   url('fonts/pt-sans-v11-latin_cyrillic-regular.woff') format('woff');
+		}
+HTML;
+
+var_dump(\optipic\cdn\ImgUrlConverter::getBaseUrlFromHtml($html));
+
 var_dump(\optipic\cdn\ImgUrlConverter::isEnabled());
 var_dump(\optipic\cdn\ImgUrlConverter::getUrlFromRelative('test.png'));
 var_dump(\optipic\cdn\ImgUrlConverter::getUrlFromRelative('test/test.png', '/foo/bar/'));

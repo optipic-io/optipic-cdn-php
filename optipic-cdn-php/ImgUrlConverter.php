@@ -38,6 +38,8 @@ class ImgUrlConverter {
     
     public static $srcsetAttrs = array();
     
+    public static $baseUrl = false;
+    
     /**
      * Constructor
      */
@@ -73,11 +75,16 @@ class ImgUrlConverter {
             }
         }
         
+        self::$baseUrl = self::getBaseUrlFromHtml($content);
+        if(self::$baseUrl) {
+            self::$baseUrl = parse_url(self::$baseUrl, PHP_URL_PATH);
+        }
+        
         //if(self::isBinary($content)) {
         //    return $content;
         //}
         
-        $domains = self::$domains;
+        /*$domains = self::$domains;
         if(!is_array($domains)) {
             $domains = array();
         }
@@ -94,8 +101,8 @@ class ImgUrlConverter {
                 $hostsForRegexp[] = $domain;
             }
             
-        }
-        foreach($hostsForRegexp as $host) {
+        }*/
+        //foreach($hostsForRegexp as $host) {
             
             /*$firstPartsOfUrl = array();
             foreach(self::$whitelistImgUrls as $whiteImgUrl) {
@@ -125,7 +132,8 @@ class ImgUrlConverter {
             $firstPartOfUrl = implode('|', $firstPartsOfUrl);
             */
             
-            $host = preg_quote($host, '#');
+            //$host = preg_quote($host, '#');
+            $host = '';
             
             //$firstPartOfUrl = '/';
             $firstPartOfUrl = '';
@@ -158,7 +166,9 @@ class ImgUrlConverter {
                 $content = $contentAfterReplace;
             }
             
-        }
+        //}
+        
+        self::$baseUrl = false;
         
         if($gziped) {
             $content = gzencode($content);
@@ -232,12 +242,26 @@ class ImgUrlConverter {
      */
     public static function callbackForPregReplace($matches) {
         //var_dump($matches);
+        $replaceWithoutOptiPic = $matches[0];
+        
         $urlOriginal = $matches[2];
         
+        $parseUrl = parse_url($urlOriginal);
         
-        $urlOriginal = self::getUrlFromRelative($urlOriginal);
+        if(!empty($parseUrl['host'])) {
+            if(!in_array($parseUrl['host'], self::$domains)) {
+                return $replaceWithoutOptiPic;
+            }
+        }
         
-        $replaceWithoutOptiPic = $matches[0];
+        $urlOriginal = $parseUrl['path'];
+        if(!empty($parseUrl['query'])) {
+            $urlOriginal .= '?'.$parseUrl['query'];
+        }
+        $urlOriginal = self::getUrlFromRelative($urlOriginal, self::$baseUrl);
+        //var_dump($urlOriginal);
+        
+        
         $replaceWithOptiPic = $matches[1].'//cdn.optipic.io/site-'.self::$siteId.$urlOriginal.$matches[5];
         
         if(substr($urlOriginal, 0, 7)=='http://') {
@@ -330,6 +354,20 @@ class ImgUrlConverter {
         $baseUrl .= '/';
         $url = str_replace('//', '/', $baseUrl.$relativeUrl);
         return $url;
+    }
+    
+    public static function getBaseUrlFromHtml($html) {
+        preg_match('#(?P<tag>base)(?P<prefix>[^>]*)\s+href=(?P<base_url>[^>\s]+)#isS', $html, $matches);
+        
+        $baseUrl = false;
+        if(!empty($matches['base_url'])) {
+            $baseUrl = trim($matches['base_url'], '"/');
+            $baseUrl = trim($baseUrl, "'");
+            if(strlen($baseUrl)>0 && substr($baseUrl, -1, 1)!='/') {
+                $baseUrl .= '/';
+            }
+        }
+        return $baseUrl;
     }
 }
 ?>
