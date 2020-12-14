@@ -127,7 +127,8 @@ class ImgUrlConverter {
             
             $host = preg_quote($host, '#');
             
-            $firstPartOfUrl = '/';
+            //$firstPartOfUrl = '/';
+            $firstPartOfUrl = '';
             
             // --------------------------------------------
             // <img srcset="">
@@ -147,7 +148,8 @@ class ImgUrlConverter {
             }
             // --------------------------------------------
             
-            $regexp = '#("|\'|\()'.$host.'('.$firstPartOfUrl.'[^/"\'\s]{1}[^"\']*\.(png|jpg|jpeg){1}(\?.*?)?)("|\'|\))#siS';
+            //$regexp = '#("|\'|\()'.$host.'('.$firstPartOfUrl.'[^/"\'\s]{1}[^"\']*\.(png|jpg|jpeg){1}(\?.*?)?)("|\'|\))#siS';
+            $regexp = '#("|\'|\()'.$host.'('.$firstPartOfUrl.'[^"|\'|\)\(]+\.(png|jpg|jpeg){1}(\?.*?)?)("|\'|\))#siS';
             //$regexp = str_replace('//', '/');
             
             //$content = preg_replace($regexp, '${1}//cdn.optipic.io/site-'.self::$siteId.'${2}${5}', $content);
@@ -232,8 +234,21 @@ class ImgUrlConverter {
         //var_dump($matches);
         $urlOriginal = $matches[2];
         
+        
+        $urlOriginal = self::getUrlFromRelative($urlOriginal);
+        
         $replaceWithoutOptiPic = $matches[0];
         $replaceWithOptiPic = $matches[1].'//cdn.optipic.io/site-'.self::$siteId.$urlOriginal.$matches[5];
+        
+        if(substr($urlOriginal, 0, 7)=='http://') {
+            return $replaceWithoutOptiPic;
+        }
+        if(substr($urlOriginal, 0, 8)=='https://') {
+            return $replaceWithoutOptiPic;
+        }
+        if(substr($urlOriginal, 0, 2)=='//') {
+            return $replaceWithoutOptiPic;
+        }
         
         if(empty(self::$whitelistImgUrls)) {
             return $replaceWithOptiPic;
@@ -302,6 +317,19 @@ class ImgUrlConverter {
     public static function isGz($str) {
         if (strlen($str) < 2) return false;
         return (ord(substr($str, 0, 1)) == 0x1f && ord(substr($str, 1, 1)) == 0x8b);
+    }
+    
+    public static function getUrlFromRelative($relativeUrl, $baseUrl=false) {
+        if(substr($relativeUrl, 0, 1)=='/') {
+            return $relativeUrl;
+        }
+        
+        if(!$baseUrl) {
+            $baseUrl = pathinfo($_SERVER['REQUEST_URI'], PATHINFO_DIRNAME);
+        }
+        $baseUrl .= '/';
+        $url = str_replace('//', '/', $baseUrl.$relativeUrl);
+        return $url;
     }
 }
 ?>

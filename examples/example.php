@@ -4,12 +4,18 @@ require_once __DIR__.'/../optipic-cdn-php/ImgUrlConverter.php';
 $converterOptiPic = new \optipic\cdn\ImgUrlConverter(/*array(
     'site_id' => 99999999,                                       // your SITE ID from CDN OptiPic controll panel
     'domains' => array('mydomain.com', 'www.mydomain.com'),      // list of domains should replace to cdn.optipic.io
-    'exclusions_url' => array('/test/test/index.php',),          // list of URL exclusions - where is URL should not converted
+    'srcset_attrs' => array('srcset', 'data-srcset'),
+    //'exclusions_url' => array('/test/test/index.php',),          // list of URL exclusions - where is URL should not converted
     //'whitelist_img_urls' => array('/foo/bar/'),
     //'whitelist_img_urls' => array('/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/foo/bar/im'),
 )*/);
 
 var_dump(\optipic\cdn\ImgUrlConverter::isEnabled());
+var_dump(\optipic\cdn\ImgUrlConverter::getUrlFromRelative('test.png'));
+var_dump(\optipic\cdn\ImgUrlConverter::getUrlFromRelative('test/test.png', '/foo/bar/'));
+var_dump(\optipic\cdn\ImgUrlConverter::getUrlFromRelative('test.png', '/asdasd'));
+var_dump(\optipic\cdn\ImgUrlConverter::getUrlFromRelative('test.png'));
+var_dump(\optipic\cdn\ImgUrlConverter::getUrlFromRelative('/test.png'));
 
 $htmls = array(
     // local urls
@@ -52,7 +58,9 @@ $htmls = array(
     </picture>',
     '<img src="/тест/кириллицы/картинка.png"/>',
     '<img data-src="https://mydomain.com/тест/кириллицы/картинка.png"/>',
-    '<div class="grid-item  grid-item-v2" style="background-image: url(/wp-content/uploads/2020/07/type_apart.jpg)"></div>'
+    '<div class="grid-item  grid-item-v2" style="background-image: url(/wp-content/uploads/2020/07/type_apart.jpg)"></div>',
+    '<img src="foo/bar/img.png"/>',
+    '<div class="grid-item  grid-item-v2" style="background-image: url(wp-content/uploads/2020/07/type_apart.jpg)"></div>',
 );
 
 $results = array();
