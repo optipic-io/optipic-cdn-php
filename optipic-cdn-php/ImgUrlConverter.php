@@ -13,6 +13,11 @@ namespace optipic\cdn;
 class ImgUrlConverter {
     
     /**
+     * Library version number
+     */
+    const VERSION = '1.8';
+    
+    /**
      * ID of your site on CDN OptiPic.io service
      */
     public static $siteId = 0;
