@@ -1,4 +1,11 @@
 <?php
+/**
+ * Admin script for PHP-library of OptiPic CDN integration
+ * version x.y.z
+ * |------ x.y   - version of main lib \optipic\cdn\ImgUrlConverter
+ * |---------- z - version of admin script
+ */
+define("OPTIPIC_PHP_CDN_ADMIN_VERSION", "3");
 
 include_once __DIR__.'/Lang.php';
 
@@ -14,6 +21,8 @@ if(!$classExists) {
         require_once $fullpathToLib;
     }
 }
+
+$OPTIPIC_PHP_CDN_ADMIN_VERSION_FULL = \optipic\cdn\ImgUrlConverter::VERSION.'.'.OPTIPIC_PHP_CDN_ADMIN_VERSION;
 
 $pathToClass = '';
 $pathToPrependFileRight = '';
@@ -221,6 +230,8 @@ if(!empty($_GET['find_variant'])) {
 </head>
 
 <body>
+
+    <div class="position-absolute small p-2" style="top:0; right: 0;"><a href="https://github.com/optipic-io/optipic-cdn-php" target="_blank">v<?=$OPTIPIC_PHP_CDN_ADMIN_VERSION_FULL?></a></div>
 
     <div class="container">
         <div class="text-center">
@@ -460,6 +471,10 @@ $(function() {
 });
 </script>
 <?php endif;?>
-    
+<?
+$siteId = !empty($config['site_id'])? $config['site_id']: '';
+?>
+<script src="https://optipic.io/api/cp/stat?domain=<?=$_SERVER["HTTP_HOST"]?>&sid=<?=$siteId?>&cms=php-cdn&stype=cdn&append_to=.container:first&version=<?=$OPTIPIC_PHP_CDN_ADMIN_VERSION_FULL?>"></script>
+
 </body>
 </html>
