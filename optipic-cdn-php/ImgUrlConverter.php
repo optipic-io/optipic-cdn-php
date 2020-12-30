@@ -15,7 +15,7 @@ class ImgUrlConverter {
     /**
      * Library version number
      */
-    const VERSION = '1.8';
+    const VERSION = '1.9';
     
     /**
      * ID of your site on CDN OptiPic.io service
@@ -350,6 +350,9 @@ class ImgUrlConverter {
     
     public static function getUrlFromRelative($relativeUrl, $baseUrl=false) {
         if(substr($relativeUrl, 0, 1)=='/') {
+            return $relativeUrl;
+        }
+        if(substr($relativeUrl, 0, 2)=='\/') { // for json-encoded urls when / --> \/
             return $relativeUrl;
         }
         
