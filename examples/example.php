@@ -77,6 +77,7 @@ $htmls = array(
     '<div class="grid-item  grid-item-v2" style="background-image: url(/wp-content/uploads/2020/07/type_apart.jpg)"></div>',
     '<img src="foo/bar/img.png"/>',
     '<div class="grid-item  grid-item-v2" style="background-image: url(wp-content/uploads/2020/07/type_apart.jpg)"></div>',
+    'json: {url: "\/wp-content\/uploads\/2020\/07\/type_apart.jpg)"}',
 );
 
 $results = array();
