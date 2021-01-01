@@ -15,7 +15,7 @@ class ImgUrlConverter {
     /**
      * Library version number
      */
-    const VERSION = '1.9';
+    const VERSION = '1.10';
     
     /**
      * ID of your site on CDN OptiPic.io service
@@ -177,6 +177,12 @@ class ImgUrlConverter {
         
         if($gziped) {
             $content = gzencode($content);
+            
+            // modify Content-Length if it's already sent
+            $headersList = self::getResponseHeadersList();
+            if(is_array($headersList) && !empty($headersList['Content-Length'])) {
+                header('Content-Length: ' . strlen($content));
+            }
         }
         
         return $content;
@@ -376,6 +382,22 @@ class ImgUrlConverter {
             }
         }
         return $baseUrl;
+    }
+    
+    public static function getResponseHeadersList() {
+        $list = array();
+        
+        $headersList = headers_list();
+        if(is_array($headersList)) {
+            foreach($headersList as $row) {
+                list($headerKey, $headerValue) = explode(":", $row);
+                $headerKey = trim($headerKey);
+                $headerValue = trim($headerValue);
+                $list[$headerKey] = $headerValue;
+            }
+        }
+        
+        return $list;
     }
 }
 ?>
