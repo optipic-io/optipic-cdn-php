@@ -8,6 +8,7 @@ $converterOptiPic = new \optipic\cdn\ImgUrlConverter(/*array(
     //'exclusions_url' => array('/test/test/index.php',),          // list of URL exclusions - where is URL should not converted
     //'whitelist_img_urls' => array('/foo/bar/'),
     //'whitelist_img_urls' => array('/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/q/', '/foo/bar/im'),
+    //'log' => true,
 )*/);
 
 $html = <<<HTML
@@ -78,6 +79,10 @@ $htmls = array(
     '<img src="foo/bar/img.png"/>',
     '<div class="grid-item  grid-item-v2" style="background-image: url(wp-content/uploads/2020/07/type_apart.jpg)"></div>',
     'json: {url: "\/wp-content\/uploads\/2020\/07\/type_apart.jpg)"}',
+    '<div classd="post-img2"><a href="potolki_s_fotopechatyu_ornamentyi_15.html"><img src="images/art/ornaments/ornament_solutions (15).jpg" itemprop="contentUrl" title="Натяжные потолки с фотопечатью -  Орнаменты 15 
+        alt="фото"/></a></div>',
+    '<img src="//cdn.optipic.io/foo/bar/img.png"/>',
+    '<img src="/foo/bar/img.png?test=1&test1=2"/>',
 );
 
 $results = array();
