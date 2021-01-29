@@ -161,3 +161,25 @@ https://www.php.net/manual/en/configuration.file.per-user.php
 If you use ionCube on your site you shouldn't add `auto_prepend_file` direcive in php settings.  
 The `ionCube` does not support the directive `auto_prepend_file` and [throws an error](https://www.ioncube.com/sa/gui_docs/settings_restrictions.html).  
 Instead, add the OptiPic connection directly to your site's entry point (usually an index.php) as stated above.
+
+### Example for `ImageCMS` (it's using `ionCube`)
+Into `index.php` insert OptiPic logic before including `core/CodeIgniter.php`
+```php
+// OptiPic
+// --------------------------------------------------------------------
+if(php_sapi_name() !== 'cli') {
+    require_once __DIR__.'/optipic-cdn-php/optipic-cdn-php/ImgUrlConverter.php';
+    ob_start(array('\optipic\cdn\ImgUrlConverter', 'convertHtml'));
+}
+// --------------------------------------------------------------------
+
+/*
+ * --------------------------------------------------------------------
+ * LOAD THE BOOTSTRAP FILE
+ * --------------------------------------------------------------------
+ *
+ * And away we go...
+ *
+ */
+require_once BASEPATH . 'core/CodeIgniter.php';
+```
