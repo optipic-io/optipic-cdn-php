@@ -191,7 +191,7 @@ require_once BASEPATH . 'core/CodeIgniter.php';
 ### Bitrix
 `/bitrix/*`
 
-## Joomla
+### Joomla
 `/administrator/*`
 
 ### Drupal
