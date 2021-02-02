@@ -183,3 +183,27 @@ if(php_sapi_name() !== 'cli') {
  */
 require_once BASEPATH . 'core/CodeIgniter.php';
 ```
+## Which URLs we recommend to exclude based on your CMS
+
+### Wordpress
+`/wp-admin/*`
+
+### Bitrix
+`/bitrix/*`
+
+## Joomla
+`/administrator/*`
+
+### Drupal
+`/en/admin/*`  
+`/ru/admin/*`  
+/<YOUR_LANG>/admin/
+
+### MODX
+`/manager/*`
+
+### OpenCart
+`/admin/*`
+
+### Other CMS
+Exclude your CMS admin area (control panel) folder with mask `*` at the end to exclude all nested urls
