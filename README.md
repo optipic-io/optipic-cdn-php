@@ -197,7 +197,7 @@ require_once BASEPATH . 'core/CodeIgniter.php';
 ### Drupal
 `/en/admin/*`  
 `/ru/admin/*`  
-/<YOUR_LANG>/admin/
+/<YOUR_LANG>/admin/*
 
 ### MODX
 `/manager/*`
