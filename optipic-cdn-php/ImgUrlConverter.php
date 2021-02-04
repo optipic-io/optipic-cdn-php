@@ -15,7 +15,7 @@ class ImgUrlConverter {
     /**
      * Library version number
      */
-    const VERSION = '1.12';
+    const VERSION = '1.13';
     
     /**
      * ID of your site on CDN OptiPic.io service
@@ -177,7 +177,7 @@ class ImgUrlConverter {
             );
             $regexp = array();
             foreach($urlBorders as $border) {
-                $regexp[] = '#('.$border[0].')'.$host.'('.$firstPartOfUrl.'(?!\/\/cdn\.optipic\.io)[^'.$border[1].']+\.(png|jpg|jpeg){1}(\?.*?)?)('.$border[1].')#siS';
+                $regexp[] = '#('.$border[0].')'.$host.'('.$firstPartOfUrl.'(?!\/\/cdn\.optipic\.io)[^'.$border[1].']+\.(png|jpg|jpeg){1}(\?[^"\'\s]*?)?)('.$border[1].')#siS';
             }
             //var_dump($regexp);exit;
             
