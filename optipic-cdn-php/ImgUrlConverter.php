@@ -298,7 +298,7 @@ class ImgUrlConverter {
         if(!empty($parseUrl['host'])) {
             if(!in_array($parseUrl['host'], self::$domains)) {
                 self::log($urlOriginal, 'callbackForPregReplace -> url original:');
-                self::log($replaceWithOptiPic, 'callbackForPregReplace -> url with optipic:');
+                self::log($replaceWithoutOptiPic, 'callbackForPregReplace -> url with optipic:');
                 return $replaceWithoutOptiPic;
             }
         }
