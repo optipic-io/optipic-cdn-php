@@ -36,6 +36,12 @@ php_value auto_prepend_file "<SITE_ROOT_DIRECTORY>/optipic-cdn-php/optipic-cdn-p
 auto_prepend_file = <SITE_ROOT_DIRECTORY>/optipic-cdn-php/optipic-cdn-php/auto_prepend_file.php
 ```
 
+### Hosting limitations to using `auto_prepend_file` php-directive
+
+Some hostings allow you to set `auto_prepend_file` only upon request to support.  
+Examples of such hostings:
+* ukraine.com.ua (https://www.ukraine.com.ua/wiki/hosting/php/auto_prepend_file/)
+
 ## Use case #2: Automatic convert image URLs using your site's entry point php-script
 
 You may include our 1-line converter in on the top of your site's entry point (e.g. `/index.php`).
