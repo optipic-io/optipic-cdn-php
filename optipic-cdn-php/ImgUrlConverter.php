@@ -291,6 +291,11 @@ class ImgUrlConverter {
         self::log($matches, 'callbackForPregReplace -> $matches');
         $replaceWithoutOptiPic = $matches[0];
         
+        // skip images from json (json-encoded)
+        if(stripos($replaceWithoutOptiPic, "\\/")!==false) {
+            return $replaceWithoutOptiPic;
+        }
+        
         $urlOriginal = $matches[2];
         
         $parseUrl = parse_url($urlOriginal);
