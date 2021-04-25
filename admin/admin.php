@@ -5,7 +5,7 @@
  * |------ x.y   - version of main lib \optipic\cdn\ImgUrlConverter
  * |---------- z - version of admin script
  */
-define("OPTIPIC_PHP_CDN_ADMIN_VERSION", "3");
+define("OPTIPIC_PHP_CDN_ADMIN_VERSION", "4");
 
 include_once __DIR__.'/Lang.php';
 
@@ -58,7 +58,9 @@ $config = array(
 );
 
 if($classExists) {
-    $config['admin_key'] = \optipic\cdn\ImgUrlConverter::$adminKey;
+    if(!empty(\optipic\cdn\ImgUrlConverter::$adminKey)) {
+        $config['admin_key'] = \optipic\cdn\ImgUrlConverter::$adminKey;
+    }
 }
 
 $currentUrlLocal = $_SERVER['QUERY_STRING'];
@@ -113,8 +115,17 @@ if($classExists) {
     $config['domains'] = \optipic\cdn\ImgUrlConverter::$domains;
     $config['exclusions_url'] = \optipic\cdn\ImgUrlConverter::$exclusionsUrl;
     $config['whitelist_img_urls'] = \optipic\cdn\ImgUrlConverter::$whitelistImgUrls;
-    $config['admin_key'] = \optipic\cdn\ImgUrlConverter::$adminKey;
+    if(!empty(\optipic\cdn\ImgUrlConverter::$adminKey)) {
+        $config['admin_key'] = \optipic\cdn\ImgUrlConverter::$adminKey;
+    }
     $config['srcset_attrs'] = \optipic\cdn\ImgUrlConverter::$srcsetAttrs;
+    
+    if(empty($config['domains'])) {
+        $config['domains'] = \optipic\cdn\ImgUrlConverter::getDefaultSettings('domains');
+    }
+    if(empty($config['srcset_attrs'])) {
+        $config['srcset_attrs'] = \optipic\cdn\ImgUrlConverter::getDefaultSettings('srcset_attrs');
+    }
 }
 
 if(!empty($_GET['find_variant'])) {
