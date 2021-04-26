@@ -427,7 +427,8 @@ class ImgUrlConverter {
         }
         
         if(!$baseUrl) {
-            $baseUrl = pathinfo($_SERVER['REQUEST_URI'], PATHINFO_DIRNAME);
+            //$baseUrl = pathinfo($_SERVER['REQUEST_URI'], PATHINFO_DIRNAME);
+            $baseUrl = self::getBaseDirOfUrl($_SERVER['REQUEST_URI']);
         }
         $baseUrl .= '/';
         $url = str_replace('//', '/', $baseUrl.$relativeUrl);
@@ -442,11 +443,13 @@ class ImgUrlConverter {
      * https://domain.com/catalog/catalog.php --> https://domain.com/catalog/
      */
     public static function getBaseDirOfUrl($url) {
-        $pathinfo = pathinfo($url);
+        $urlParsed = parse_url($url);
+        $urlPath = $urlParsed['path'];
+        $pathinfo = pathinfo($urlPath);
         if(!empty($pathinfo['extension'])) {
             return $pathinfo['dirname'];
         }
-        return $url;
+        return $urlPath;
     }
     
     public static function getBaseUrlFromHtml($html) {
