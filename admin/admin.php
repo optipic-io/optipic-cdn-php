@@ -5,7 +5,7 @@
  * |------ x.y   - version of main lib \optipic\cdn\ImgUrlConverter
  * |---------- z - version of admin script
  */
-define("OPTIPIC_PHP_CDN_ADMIN_VERSION", "4");
+define("OPTIPIC_PHP_CDN_ADMIN_VERSION", "5");
 
 include_once __DIR__.'/Lang.php';
 
@@ -127,61 +127,6 @@ if($classExists) {
         $config['srcset_attrs'] = \optipic\cdn\ImgUrlConverter::getDefaultSettings('srcset_attrs');
     }
 }
-
-if(!empty($_GET['find_variant'])) {
-    //echo $_GET['find_variant'];
-    if($_GET['find_variant']=='htaccess') {
-        if(empty($_GET['find_variant_run'])) {
-            file_put_contents(__DIR__ . '/.htaccess.for-test', 'php_value auto_prepend_file "'.$pathToPrependFileRight.'"');
-            @rename(__DIR__ . '/.htaccess.for-test', __DIR__ . '/.htaccess');
-            header("Location: admin.php?find_variant={$_GET['find_variant']}&find_variant_run=1&key=".$currentKey);
-        }
-        else {
-            @rename(__DIR__ . '/.htaccess', __DIR__ . '/.htaccess.for-test');
-            header('Content-Type: application/json');
-            echo json_encode(array('ok' => $isOk));
-            exit;
-        }
-        
-    }
-    
-    if($_GET['find_variant']=='user-ini') {
-        if(empty($_GET['find_variant_run'])) {
-            file_put_contents(__DIR__ . '/.user.ini.for-test', 'auto_prepend_file = '.$pathToPrependFileRight);
-            @rename(__DIR__ . '/.user.ini.for-test', __DIR__ . '/.user.ini');
-            header("Location: admin.php?find_variant={$_GET['find_variant']}&find_variant_run=1&key=".$currentKey);
-        }
-        else {
-            @rename(__DIR__ . '/.user.ini', __DIR__ . '/.user.ini.for-test');
-            header('Content-Type: application/json');
-            echo json_encode(array('ok' => $isOk));
-            exit;
-        }
-        
-    }
-    
-    if($_GET['find_variant']=='php-ini') {
-        if(empty($_GET['find_variant_run'])) {
-            file_put_contents(__DIR__ . '/php.ini.for-test', 'auto_prepend_file = '.$pathToPrependFileRight);
-            @rename(__DIR__ . '/php.ini.for-test', __DIR__ . '/php.ini');
-            header("Location: admin.php?find_variant={$_GET['find_variant']}&find_variant_run=1&key=".$currentKey);
-        }
-        else {
-            @rename(__DIR__ . '/php.ini', __DIR__ . '/php.ini.for-test');
-            header('Content-Type: application/json');
-            echo json_encode(array('ok' => $isOk));
-            exit;
-        }
-        
-    }
-    
-    
-    
-    exit;
-}
-
-
-
 ?>
 <!doctype html>
 <html lang="en">
@@ -457,19 +402,19 @@ auto_prepend_file = <?php echo $pathToPrependFileRight?></pre>
 $(function() {
     $("#tab-install").click(function() {
         $("#accordionInstall h3 .badge").addClass("d-none");
-        $.get('', {find_variant: 'htaccess'}, function(data) {
+        $.get('detect-connection/detect.php', {find_variant: 'htaccess'}, function(data) {
             console.log(data);
             if(typeof data.ok != 'undefined' && data.ok==true) {
                 $("#htaccess-pass").removeClass("d-none");
             }
             
-            $.get('', {find_variant: 'user-ini'}, function(data) {
+            $.get('detect-connection/detect.php', {find_variant: 'user-ini'}, function(data) {
                 console.log(data);
                 if(typeof data.ok != 'undefined' && data.ok==true) {
                     $("#user-ini-pass").removeClass("d-none");
                 }
                 
-                $.get('', {find_variant: 'php-ini'}, function(data) {
+                $.get('detect-connection/detect.php', {find_variant: 'php-ini'}, function(data) {
                     console.log(data);
                     if(typeof data.ok != 'undefined' && data.ok==true) {
                         $("#php-ini-pass").removeClass("d-none");
