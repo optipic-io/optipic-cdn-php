@@ -13,6 +13,21 @@ use \optipic\cdn\Lang;
 
 Lang::init(__FILE__, (!empty($_GET['lang'])? $_GET['lang']: false));
 
+$tempDetectionFiles = array(
+    'php.ini.for-test',
+    'php.ini',
+    '.user.ini.for-test',
+    '.user.ini',
+    '.htaccess.for-test',
+    '.htaccess',
+);
+foreach($tempDetectionFiles as $tempDetectionFile) {
+    $tempDetectionFilePath = __DIR__ . '/detect-connection/'.$tempDetectionFile;
+    if(file_exists($tempDetectionFilePath)) {
+        @unlink($tempDetectionFilePath);
+    }
+}
+
 $classExists = class_exists('\optipic\cdn\ImgUrlConverter');
 
 if(!$classExists) {
