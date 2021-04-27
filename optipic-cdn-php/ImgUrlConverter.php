@@ -73,6 +73,10 @@ class ImgUrlConverter {
             self::loadConfig();
         }
         
+        if(empty(self::$siteId)) {
+            return $content;
+        }
+        
         if(!self::isEnabled()) {
             return $content;
         }
