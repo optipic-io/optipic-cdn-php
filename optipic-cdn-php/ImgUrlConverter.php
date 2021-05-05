@@ -16,7 +16,7 @@ class ImgUrlConverter {
     /**
      * Library version number
      */
-    const VERSION = '1.14';
+    const VERSION = '1.15';
     
     /**
      * ID of your site on CDN OptiPic.io service
@@ -448,6 +448,9 @@ class ImgUrlConverter {
      */
     public static function getBaseDirOfUrl($url) {
         $urlParsed = parse_url($url);
+        if(empty($urlParsed['path'])) {
+            return '/';
+        }
         $urlPath = $urlParsed['path'];
         $pathinfo = pathinfo($urlPath);
         if(!empty($pathinfo['extension'])) {
