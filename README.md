@@ -211,5 +211,8 @@ require_once BASEPATH . 'core/CodeIgniter.php';
 ### OpenCart
 `/admin/*`
 
+### HostCMS
+`/admin/*`
+
 ### Other CMS
 Exclude your CMS admin area (control panel) folder with mask `*` at the end to exclude all nested urls
