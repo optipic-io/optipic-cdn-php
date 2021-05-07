@@ -141,6 +141,20 @@ if($classExists) {
     if(empty($config['srcset_attrs'])) {
         $config['srcset_attrs'] = \optipic\cdn\ImgUrlConverter::getDefaultSettings('srcset_attrs');
     }
+    if(empty($config['exclusions_url'])) {
+        $config['exclusions_url'] = array(
+            '/wp-admin/*',
+            '/bitrix/*',
+            '/administrator/*',
+            '/en/admin/*',
+            '/ru/admin/*',
+            '/es/admin/*',
+            '/manager/*',
+            '/admin.php',
+            '/admin.php*',
+            '/admin*',
+        );
+    }
 }
 ?>
 <!doctype html>
