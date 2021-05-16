@@ -16,7 +16,7 @@ class ImgUrlConverter {
     /**
      * Library version number
      */
-    const VERSION = '1.15';
+    const VERSION = '1.16';
     
     /**
      * ID of your site on CDN OptiPic.io service
@@ -423,6 +423,10 @@ class ImgUrlConverter {
     }
     
     public static function getUrlFromRelative($relativeUrl, $baseUrl=false) {
+        if(stripos($relativeUrl, '../')!==false) {
+            $relativeUrl = self::resolveFilename($relativeUrl);
+        }
+        
         if(substr($relativeUrl, 0, 1)=='/') {
             return $relativeUrl;
         }
@@ -434,9 +438,27 @@ class ImgUrlConverter {
             //$baseUrl = pathinfo($_SERVER['REQUEST_URI'], PATHINFO_DIRNAME);
             $baseUrl = self::getBaseDirOfUrl($_SERVER['REQUEST_URI']);
         }
-        $baseUrl .= '/';
+        //$baseUrl .= '/';
+        
         $url = str_replace('//', '/', $baseUrl.$relativeUrl);
         return $url;
+    }
+    
+    
+    
+    public static function resolveFilename($filename) {
+        $filename = str_replace('//', '/', $filename);
+        $parts = explode('/', $filename);
+        $out = array();
+        foreach ($parts as $part){
+            if ($part == '.') continue;
+            if ($part == '..') {
+                array_pop($out);
+                continue;
+            }
+            $out[] = $part;
+        }
+        return implode('/', $out);
     }
     
     
@@ -452,11 +474,24 @@ class ImgUrlConverter {
             return '/';
         }
         $urlPath = $urlParsed['path'];
+        $baseUrl = $urlPath;
         $pathinfo = pathinfo($urlPath);
         if(!empty($pathinfo['extension'])) {
-            return $pathinfo['dirname'];
+            $baseUrl = $pathinfo['dirname'];
         }
-        return $urlPath;
+        
+        if(stripos($url, $baseUrl.'/')!==false) {
+            $baseUrl .= '/';
+        }
+        
+        if(substr($baseUrl, -1)!='/') {
+            $pathinfo = pathinfo($baseUrl);
+            if(!empty($pathinfo['dirname'])) {
+                $baseUrl = $pathinfo['dirname'];
+            }
+        }
+        
+        return $baseUrl;
     }
     
     public static function getBaseUrlFromHtml($html) {
@@ -467,9 +502,9 @@ class ImgUrlConverter {
             $baseUrl = trim($matches['base_url'], '"/');
             $baseUrl = trim($baseUrl, "'");
             $baseUrl = self::getBaseDirOfUrl($baseUrl);
-            if(strlen($baseUrl)>0 && substr($baseUrl, -1, 1)!='/') {
+            /*if(strlen($baseUrl)>0 && substr($baseUrl, -1, 1)!='/') {
                 $baseUrl .= '/';
-            }
+            }*/
         }
         return $baseUrl;
     }
