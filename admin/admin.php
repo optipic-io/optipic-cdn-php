@@ -5,7 +5,7 @@
  * |------ x.y   - version of main lib \optipic\cdn\ImgUrlConverter
  * |---------- z - version of admin script
  */
-define("OPTIPIC_PHP_CDN_ADMIN_VERSION", "5");
+define("OPTIPIC_PHP_CDN_ADMIN_VERSION", "6");
 
 include_once __DIR__.'/Lang.php';
 
@@ -72,7 +72,8 @@ $config = array(
     'whitelist_img_urls' => array(), // whitelist of images URL - what should to be converted (parts or full urls start from '/')
 );
 
-if($classExists) {
+if(class_exists('\optipic\cdn\ImgUrlConverter')) {
+    \optipic\cdn\ImgUrlConverter::loadConfig();
     if(!empty(\optipic\cdn\ImgUrlConverter::$adminKey)) {
         $config['admin_key'] = \optipic\cdn\ImgUrlConverter::$adminKey;
     }
