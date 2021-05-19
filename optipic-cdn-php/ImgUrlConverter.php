@@ -326,7 +326,7 @@ class ImgUrlConverter {
             }
         }
         
-        $ext = pathinfo($parseUrl['path'], PATHINFO_EXTENSION);
+        $ext = strtolower(pathinfo($parseUrl['path'], PATHINFO_EXTENSION));
         if(!in_array($ext, array('png', 'jpg', 'jpeg'))) {
             return $replaceWithoutOptiPic; 
         }
