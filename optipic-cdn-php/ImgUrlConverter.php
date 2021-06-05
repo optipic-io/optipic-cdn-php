@@ -16,7 +16,7 @@ class ImgUrlConverter {
     /**
      * Library version number
      */
-    const VERSION = '1.16';
+    const VERSION = '1.17';
     
     /**
      * ID of your site on CDN OptiPic.io service
@@ -47,6 +47,8 @@ class ImgUrlConverter {
     public static $baseUrl = false;
     
     public static $enableLog = false;
+    
+    public static $cdnDomain = 'cdn.optipic.io';
     
     /**
      * Constructor
@@ -180,9 +182,23 @@ class ImgUrlConverter {
                 array('\'', '\''), // '<url>'
                 array('\(', '\)'), // (<url>)
             );
+            
+            $cdnDomains = array(
+                'cdn.optipic.io',
+            );
+            
+            $cdnDomains[] = self::$cdnDomain;
+            $cdnDomains = array_unique($cdnDomains);
+            
+            $cdnDomainsForRegexp = array();
+            foreach($cdnDomains as $cdnDomain) {
+                $cdnDomainsForRegexp[] = '\/\/'.preg_quote($cdnDomain, '#');
+            }
+            $cdnDomainsForRegexp = implode("|", $cdnDomainsForRegexp);
+            
             $regexp = array();
             foreach($urlBorders as $border) {
-                $regexp[] = '#('.$border[0].')'.$host.'('.$firstPartOfUrl.'(?!\/\/cdn\.optipic\.io)[^'.$border[1].']+\.(png|jpg|jpeg){1}(\?[^"\'\s]*?)?)('.$border[1].')#siS';
+                $regexp[] = '#('.$border[0].')'.$host.'('.$firstPartOfUrl.'(?!'.$cdnDomainsForRegexp.')[^'.$border[1].']+\.(png|jpg|jpeg){1}(\?[^"\'\s]*?)?)('.$border[1].')#siS';
             }
             //var_dump($regexp);exit;
             
@@ -272,6 +288,10 @@ class ImgUrlConverter {
                     self::$enableLog = true;
                 }
             }
+            
+            if(isset($source['cdn_domain'])) {
+                self::$cdnDomain = $source['cdn_domain'];
+            }
         }
         elseif(file_exists($source)) {
             $config = require($source);
@@ -338,7 +358,7 @@ class ImgUrlConverter {
         $urlOriginal = self::getUrlFromRelative($urlOriginal, self::$baseUrl);
         
         
-        $replaceWithOptiPic = $matches[1].'//cdn.optipic.io/site-'.self::$siteId.$urlOriginal.$matches[5];
+        $replaceWithOptiPic = $matches[1].'//'.self::$cdnDomain.'/site-'.self::$siteId.$urlOriginal.$matches[5];
         
         self::log($urlOriginal, 'callbackForPregReplace -> url original:');
         self::log($replaceWithOptiPic, 'callbackForPregReplace -> url with optipic:');
