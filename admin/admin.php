@@ -5,7 +5,7 @@
  * |------ x.y   - version of main lib \optipic\cdn\ImgUrlConverter
  * |---------- z - version of admin script
  */
-define("OPTIPIC_PHP_CDN_ADMIN_VERSION", "6");
+define("OPTIPIC_PHP_CDN_ADMIN_VERSION", "7");
 
 include_once __DIR__.'/Lang.php';
 
@@ -100,6 +100,7 @@ if($classExists) {
         $_POST['optipicConfig']['whitelist_img_urls'] = explode("\n", $_POST['optipicConfig']['whitelist_img_urls']);
         $_POST['optipicConfig']['srcset_attrs'] = explode("\n", $_POST['optipicConfig']['srcset_attrs']);
         $_POST['optipicConfig']['admin_key'] = trim($_POST['optipicConfig']['admin_key']);
+        $_POST['optipicConfig']['cdn_domain'] = trim($_POST['optipicConfig']['cdn_domain']);
         
         $newConfig = $_POST['optipicConfig'];
         foreach(array('domains', 'exclusions_url', 'whitelist_img_urls', 'srcset_attrs') as $configKey) {
@@ -156,6 +157,7 @@ if($classExists) {
             '/admin*',
         );
     }
+    $config['cdn_domain'] = \optipic\cdn\ImgUrlConverter::$cdnDomain;
 }
 ?>
 <!doctype html>
@@ -402,6 +404,12 @@ auto_prepend_file = <?php echo $pathToPrependFileRight?></pre>
                             srcset<br/>
                             data-srcset
                         </small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="optipic_cdn_domain"><?php echo Lang::t('cdn_domain')?></label>
+                        <input type="text" name="optipicConfig[cdn_domain]" class="form-control" id="optipic_cdn_domain" aria-describedby="optipic_cdn_domain_help" value="<?php echo $config['cdn_domain']?>">
+                        <small id="optipic_cdn_domain_help" class="form-text text-muted"><?php echo Lang::t('cdn_domain_helper')?></small>
                     </div>
                     
                     <div class="form-group text-center">
