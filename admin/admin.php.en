@@ -29,6 +29,8 @@ return array(
     'srcset_attrs' => "List of 'srcset' attributes",
     'srcset_attrs_helper' => 'List of tag attributes, in which you need to replace srcset-markup of images',
     'srcset_definition' => 'What is srcset?',
+    'cdn_domain' => 'CDN domain',
+    'cdn_domain_helper' => "Domain through which CDN OptiPic will work. You can use your subdomain (img.yourdomain.com, optipic.yourdomain.com, etc.) instead of the standard cdn.optipic.io. To connect your subdomain, contact OptiPic technical support.",
     '' => '',
     '' => '',
     '' => '',
