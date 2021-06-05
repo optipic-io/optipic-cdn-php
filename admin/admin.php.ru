@@ -29,6 +29,8 @@ return array(
     'srcset_attrs' => 'Список srcset атрибутов',
     'srcset_attrs_helper' => 'Список атрибутов тегов, в которых нужно подменять srcset-разметку изображений',
     'srcset_definition' => 'Что такое srcset?',
+    'cdn_domain' => 'CDN домен',
+    'cdn_domain_helper' => 'Домен через который будет работать CDN OptiPic. Вы можете использовать поддомен вашего домена (img.yourdomain.com, optipic.yourdomain.com и т.п.) вместо стандартного cdn.optipic.io. Для подключению своего поддомена обратитесь в техподдержку OptiPic.',
     '' => '',
     0 => 'подходит для вашего хостинга',
     1 => 'Помощник по установке модуля',
