@@ -214,6 +214,8 @@ class ImgUrlConverter {
         
         self::$baseUrl = false;
         
+        $content = str_replace('<head>', '<head>' . PHP_EOL . self::getPreloadTags(), $content);
+        
         if($gziped) {
             $content = gzencode($content);
             
@@ -229,6 +231,15 @@ class ImgUrlConverter {
         
         return $content;
     }
+    
+    
+    
+    public static function getPreloadTags() {
+        return '<link href="//'.self::$cdnDomain.'/preload.css" rel="stylesheet">' . PHP_EOL
+               . '<link rel="preload" href="//'.self::$cdnDomain.'/preload.png" as="image">';
+    }
+    
+    
     
     public static function trimList($list) {
         $trimmed = array();
