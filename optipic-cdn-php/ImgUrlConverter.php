@@ -16,7 +16,7 @@ class ImgUrlConverter {
     /**
      * Library version number
      */
-    const VERSION = '1.17';
+    const VERSION = '1.18';
     
     /**
      * ID of your site on CDN OptiPic.io service
@@ -300,7 +300,7 @@ class ImgUrlConverter {
                 }
             }
             
-            if(isset($source['cdn_domain'])) {
+            if(!empty($source['cdn_domain'])) {
                 self::$cdnDomain = $source['cdn_domain'];
             }
         }
