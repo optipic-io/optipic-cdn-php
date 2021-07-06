@@ -423,7 +423,20 @@ auto_prepend_file = <?php echo $pathToPrependFileRight?></pre>
                 <?php endif;?>
             </div>
             <div class="tab-pane" id="tabPhpInfo" role="tabpanel">
-                <?php echo phpinfo();?>
+                <?php if(function_exists('phpinfo')): ?>
+                    <?php echo phpinfo(
+                        INFO_GENERAL 
+                        | INFO_CREDITS 
+                        | INFO_CONFIGURATION 
+                        // This part of phpinfo() may be blocked on some hostings - so phpinfo() should not use without params.
+                        /*| INFO_MODULES */
+                        | INFO_ENVIRONMENT 
+                        | INFO_VARIABLES 
+                        | INFO_LICENSE
+                    );?>
+                <?php else: ?>
+                    WARNING: PHP-function 'phpinfo()' disabled on your hosting.
+                <?php endif; ?>
             </div>
             <div class="tab-pane text-center" id="tabSupport" role="tabpanel">
                 <a href="https://optipic.io/get-free-help/?cdn=1" target="_blank" class="btn btn-primary btn-lg"><?php echo Lang::t('get_support')?></a>
