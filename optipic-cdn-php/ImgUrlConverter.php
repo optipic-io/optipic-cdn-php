@@ -16,7 +16,7 @@ class ImgUrlConverter {
     /**
      * Library version number
      */
-    const VERSION = '1.18';
+    const VERSION = '1.19';
     
     /**
      * ID of your site on CDN OptiPic.io service
@@ -526,7 +526,7 @@ class ImgUrlConverter {
     }
     
     public static function getBaseUrlFromHtml($html) {
-        preg_match('#(?P<tag>base)(?P<prefix>[^>]*)\s+href=(?P<base_url>[^>\s]+)#isS', $html, $matches);
+        preg_match('#(?P<tag><base)(?P<prefix>[^>]*)\s+href=(?P<base_url>[^>\s]+)#isS', $html, $matches);
         
         $baseUrl = false;
         if(!empty($matches['base_url'])) {
