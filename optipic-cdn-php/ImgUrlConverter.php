@@ -16,7 +16,7 @@ class ImgUrlConverter
     /**
      * Library version number
      */
-    const VERSION = '1.19';
+    const VERSION = '1.20';
     
     /**
      * ID of your site on CDN OptiPic.io service
@@ -50,6 +50,10 @@ class ImgUrlConverter
     
     public static $cdnDomain = 'cdn.optipic.io';
     
+    public static $url = null;
+    
+    public static $host = null;
+    
     /**
      * Constructor
      */
@@ -63,8 +67,15 @@ class ImgUrlConverter
     /**
      * Convert whole HTML-block contains image urls
      */
-    public static function convertHtml($content)
+    public static function convertHtml($content, $detectBaseUrl = true)
     {
+        
+        if(empty(self::$url)) {
+            self::$url = $_SERVER['REQUEST_URI'];
+        }
+        if(empty(self::$host)) {
+            self::$host = $_SERVER['HTTP_HOST'];
+        }
         
         $timeStart = microtime(true);
         
@@ -93,9 +104,11 @@ class ImgUrlConverter
             }
         }
         
-        self::$baseUrl = self::getBaseUrlFromHtml($content);
-        if (self::$baseUrl) {
-            self::$baseUrl = parse_url(self::$baseUrl, PHP_URL_PATH);
+        if($detectBaseUrl) {
+            self::$baseUrl = self::getBaseUrlFromHtml($content);
+            if (self::$baseUrl) {
+                self::$baseUrl = parse_url(self::$baseUrl, PHP_URL_PATH);
+            }
         }
         
         //if (self::isBinary($content)) {
@@ -214,7 +227,7 @@ class ImgUrlConverter
             
         //}
         
-        self::$baseUrl = false;
+        //self::$baseUrl = false; // ?
         
         $content = str_replace('<head>', '<head>' . PHP_EOL . self::getPreloadTags(), $content);
         
@@ -322,7 +335,8 @@ class ImgUrlConverter
      */
     public static function isEnabled()
     {
-        $url = $_SERVER['REQUEST_URI'];
+        //$url = $_SERVER['REQUEST_URI'];
+        $url = self::$url;
         if (in_array($url, self::$exclusionsUrl)) {
             return false;
         }
@@ -423,7 +437,7 @@ class ImgUrlConverter
             $url = trim($source[0]);
             $size = (isset($source[1]))? trim($source[1]): '';
             $toConvertUrl = "(".$url.")";
-            $convertedUrl = self::convertHtml($toConvertUrl);
+            $convertedUrl = self::convertHtml($toConvertUrl, false);
             if ($toConvertUrl!=$convertedUrl) {
                 $isConverted = true;
                 $listConverted[] = trim(self::substr($convertedUrl, 1, -1).' '.$size);
@@ -477,8 +491,8 @@ class ImgUrlConverter
         }
         
         if (!$baseUrl) {
-            //$baseUrl = pathinfo($_SERVER['REQUEST_URI'], PATHINFO_DIRNAME);
-            $baseUrl = self::getBaseDirOfUrl($_SERVER['REQUEST_URI']);
+            //$baseUrl = pathinfo(self::$url, PATHINFO_DIRNAME);
+            $baseUrl = self::getBaseDirOfUrl(self::$url);
         }
         //$baseUrl .= '/';
         
@@ -590,7 +604,7 @@ class ImgUrlConverter
         }
         $dateFormatted = $date->format("Y-m-d H:i:s u");
         
-        $line = "[$dateFormatted] {$_SERVER['REQUEST_URI']}\n";
+        $line = "[$dateFormatted] {self::$url}\n";
         if ($comment) {
             $line .= "# ".$comment."\n";
         }
@@ -627,11 +641,11 @@ class ImgUrlConverter
     
     public static function getCurrentDomain($trimWww = false)
     {
-        if (empty($_SERVER['HTTP_HOST'])) {
+        if (empty(self::$host)) {
             return false;
         }
         
-        $currentHost = explode(":", $_SERVER['HTTP_HOST']);
+        $currentHost = explode(":", self::$host);
         $currentHost = trim($currentHost[0]);
         if ($trimWww) {
             if (stripos($currentHost, 'www.')===0) {
