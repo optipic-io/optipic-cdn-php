@@ -83,17 +83,19 @@ class ImgUrlConverter
         
         $content = self::removeBomFromUtf($content);
         
+        $contentOrig = $content;
+        
         // try auto load config from __DIR__.'config.php'
         if (empty(self::$siteId)) {
             self::loadConfig();
         }
         
         if (empty(self::$siteId)) {
-            return $content;
+            return $contentOrig;
         }
         
         if (!self::isEnabled()) {
-            return $content;
+            return $contentOrig;
         }
         
         $gziped = false;
@@ -103,6 +105,22 @@ class ImgUrlConverter
                 $content = $contentUngzip;
             }
         }
+        
+        
+        $needToConvert = true;
+        
+        if ($needToConvert && self::htmlHasAmpMarkup($content)) {
+            $needToConvert = false;
+        }
+        
+        if ($needToConvert && self::htmlHasXmlMarkup($content)) {
+            $needToConvert = false;
+        }
+        
+        if (!$needToConvert) {
+            return $contentOrig;
+        }
+        
         
         if($detectBaseUrl) {
             self::$baseUrl = self::getBaseUrlFromHtml($content);
@@ -672,5 +690,15 @@ class ImgUrlConverter
     public static function strtolower($str)
     {
         return strtolower($str);
+    }
+    
+    
+    public static function htmlHasAmpMarkup($html) {
+         return (stripos($html, "<html amp")!==false);
+    }
+    
+    
+    public static function htmlHasXmlMarkup($html) {
+         return (stripos($html, "<?xml")!==false);
     }
 }
