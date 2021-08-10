@@ -16,7 +16,7 @@ class ImgUrlConverter
     /**
      * Library version number
      */
-    const VERSION = '1.20';
+    const VERSION = '1.21';
     
     /**
      * ID of your site on CDN OptiPic.io service
@@ -198,7 +198,7 @@ class ImgUrlConverter
             }
             $srcSetAttrsRegexp = implode('|', $srcSetAttrsRegexp);
             //$content = preg_replace_callback('#<(?P<tag>[^\s]+)(?P<prefix>.*?)\s+(?P<attr>'.$srcSetAttrsRegexp.')=(?P<quote1>"|\')(?P<set>[^"]+?)(?P<quote2>"|\')(?P<suffix>[^>]*?)>#siS', array(__NAMESPACE__ .'\ImgUrlConverter', 'callbackForPregReplaceSrcset'), $content);
-            $contentAfterReplace = preg_replace_callback('#<(?P<tag>source|img|picture)(?P<prefix>[^>]*)\s+(?P<attr>'.$srcSetAttrsRegexp.')=(?P<quote1>"|\')(?P<set>[^"\']+?)(?P<quote2>"|\')(?P<suffix>[^>]*)>#siS', array(__NAMESPACE__ .'\ImgUrlConverter', 'callbackForPregReplaceSrcset'), $content);
+            $contentAfterReplace = preg_replace_callback('#<(?P<tag>source|img|picture)(?P<prefix>[^>]*)\s+(?P<attr>'.$srcSetAttrsRegexp.')=(?P<quote1>"|\'|\\\"|\\\')(?P<set>[^"\']+?)(?P<quote2>"|\'|\\\"|\\\')(?P<suffix>[^>]*)>#siS', array(__NAMESPACE__ .'\ImgUrlConverter', 'callbackForPregReplaceSrcset'), $content);
             if (!empty($contentAfterReplace)) {
                 $content = $contentAfterReplace;
             }
@@ -211,9 +211,11 @@ class ImgUrlConverter
         //$regexp = '#("|\'|\()'.$host.'('.$firstPartOfUrl.'[^"|\'|\)\(]+\.(png|jpg|jpeg){1}(\?.*?)?)("|\'|\))#siS';
         
         $urlBorders = array(
-            array('"', '"'),   // "<url>"
-            array('\'', '\''), // '<url>'
-            array('\(', '\)'), // (<url>)
+            array('"', '"', '"'),       // "<url>"
+            array('\'', '\'', '\''),    // '<url>'
+            array('\(', '\)', '\)'),    // (<url>)
+            array('\\\"', '\\\"', '"'), // "<url>" in JSON
+            array("\\\'", "\\\'", "'"), // '<url>' in JSON
         );
         
         $cdnDomains = array(
@@ -225,13 +227,15 @@ class ImgUrlConverter
         
         $cdnDomainsForRegexp = array();
         foreach ($cdnDomains as $cdnDomain) {
-            $cdnDomainsForRegexp[] = '\/\/'.preg_quote($cdnDomain, '#');
+            $cdnDomainsForRegexp[] = '\/\/'.preg_quote($cdnDomain, '#');   // plain html
+            $cdnDomainsForRegexp[] = '\\/\\/'.preg_quote($cdnDomain, '#'); // html in json
+            
         }
         $cdnDomainsForRegexp = implode("|", $cdnDomainsForRegexp);
         
         $regexp = array();
         foreach ($urlBorders as $border) {
-            $regexp[] = '#('.$border[0].')'.$host.'('.$firstPartOfUrl.'(?!'.$cdnDomainsForRegexp.')[^'.$border[1].']+\.(png|jpg|jpeg){1}(\?[^"\'\s]*?)?)('.$border[1].')#siS';
+            $regexp[] = '#('.$border[0].')'.$host.'('.$firstPartOfUrl.'(?!'.$cdnDomainsForRegexp.')[^'.$border[2].']+\.(png|jpg|jpeg){1}(\?[^"\'\s]*?)?)\s*('.$border[1].')#siS';
         }
         //var_dump($regexp);exit;
         
@@ -378,14 +382,28 @@ class ImgUrlConverter
         self::log($matches, 'callbackForPregReplace -> $matches');
         $replaceWithoutOptiPic = $matches[0];
         
-        // skip images from json (json-encoded)
-        if (stripos($replaceWithoutOptiPic, "\\/")!==false) {
-            return $replaceWithoutOptiPic;
-        }
-        
         $urlOriginal = $matches[2];
         
-        $parseUrl = parse_url($urlOriginal);
+        $slash = '/';
+        // skip images from json (json-encoded)
+        if (stripos($replaceWithoutOptiPic, "\\/")!==false) {
+            //return $replaceWithoutOptiPic;
+            $slash = '\\/';
+            //var_dump($urlOriginal);
+            $parseUrl = parse_url(json_decode('"'.$urlOriginal.'"'));
+            //var_dump($parseUrl);
+            $parseUrl['path'] = trim(json_encode($parseUrl['path']), "'\"");
+            if (!empty($parseUrl['query'])) {
+                $parseUrl['query'] = trim(json_encode($parseUrl['query']), "'\"");
+            }
+            //var_dump($parseUrl);exit;
+        }
+        else {
+            $parseUrl = parse_url($urlOriginal);
+        }
+        
+        
+        
         
         if (!empty($parseUrl['host'])) {
             if (!in_array($parseUrl['host'], self::$domains)) {
@@ -404,10 +422,9 @@ class ImgUrlConverter
         if (!empty($parseUrl['query'])) {
             $urlOriginal .= '?'.$parseUrl['query'];
         }
-        $urlOriginal = self::getUrlFromRelative($urlOriginal, self::$baseUrl);
+        $urlOriginal = self::getUrlFromRelative($urlOriginal, self::$baseUrl, $slash);
         
-        
-        $replaceWithOptiPic = $matches[1].'//'.self::$cdnDomain.'/site-'.self::$siteId.$urlOriginal.$matches[5];
+        $replaceWithOptiPic = $matches[1].$slash.$slash.self::$cdnDomain.$slash.'site-'.self::$siteId.$urlOriginal.$matches[5];
         
         self::log($urlOriginal, 'callbackForPregReplace -> url original:');
         self::log($replaceWithOptiPic, 'callbackForPregReplace -> url with optipic:');
@@ -495,18 +512,19 @@ class ImgUrlConverter
         return (ord(self::substr($str, 0, 1)) == 0x1f && ord(self::substr($str, 1, 1)) == 0x8b);
     }
     
-    public static function getUrlFromRelative($relativeUrl, $baseUrl = false)
+    public static function getUrlFromRelative($relativeUrl, $baseUrl = false, $slash = '/')
     {
+        self::log($relativeUrl, 'getUrlFromRelative -> param orig');
         if (stripos($relativeUrl, '../')!==false) {
-            $relativeUrl = self::resolveFilename($relativeUrl);
+            $relativeUrl = self::resolveFilename($relativeUrl, $slash);
         }
         
-        if (self::substr($relativeUrl, 0, 1)=='/') {
+        if (self::substr($relativeUrl, 0, strlen($slash))==$slash) {
             return $relativeUrl;
         }
-        if (self::substr($relativeUrl, 0, 2)=='\/') { // for json-encoded urls when / --> \/
+        /*if (self::substr($relativeUrl, 0, 2)=='\/') { // for json-encoded urls when / --> \/
             return $relativeUrl;
-        }
+        }*/
         
         if (!$baseUrl) {
             //$baseUrl = pathinfo(self::$url, PATHINFO_DIRNAME);
@@ -514,16 +532,17 @@ class ImgUrlConverter
         }
         //$baseUrl .= '/';
         
-        $url = str_replace('//', '/', $baseUrl.$relativeUrl);
+        // double slash to one slash
+        $url = str_replace($slash.$slash, $slash, $baseUrl.$relativeUrl);
         return $url;
     }
     
     
     
-    public static function resolveFilename($filename)
+    public static function resolveFilename($filename, $slash = '/')
     {
-        $filename = str_replace('//', '/', $filename);
-        $parts = explode('/', $filename);
+        $filename = str_replace($slash.$slash, $slash, $filename);
+        $parts = explode($slash, $filename);
         $out = array();
         foreach ($parts as $part) {
             if ($part == '.') {
@@ -535,7 +554,7 @@ class ImgUrlConverter
             }
             $out[] = $part;
         }
-        return implode('/', $out);
+        return implode($slash, $out);
     }
     
     
