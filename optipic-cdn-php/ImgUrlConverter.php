@@ -678,6 +678,10 @@ class ImgUrlConverter
     
     public static function getCurrentDomain($trimWww = false)
     {
+        if (is_null(self::$host) && !empty($_SERVER['HTTP_HOST'])) {
+            self::$host = $_SERVER['HTTP_HOST'];
+        }
+        
         if (empty(self::$host)) {
             return false;
         }
