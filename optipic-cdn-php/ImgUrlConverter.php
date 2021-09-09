@@ -16,7 +16,7 @@ class ImgUrlConverter
     /**
      * Library version number
      */
-    const VERSION = '1.21';
+    const VERSION = '1.22';
     
     /**
      * ID of your site on CDN OptiPic.io service
@@ -471,7 +471,7 @@ class ImgUrlConverter
             $source = preg_split("/[\s,]+/siS", trim($item));
             $url = trim($source[0]);
             $size = (isset($source[1]))? trim($source[1]): '';
-            $toConvertUrl = "(".$url.")";
+            $toConvertUrl = "'".$url."'";
             $convertedUrl = self::convertHtml($toConvertUrl, false);
             if ($toConvertUrl!=$convertedUrl) {
                 $isConverted = true;
