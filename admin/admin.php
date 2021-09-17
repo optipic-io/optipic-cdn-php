@@ -155,6 +155,7 @@ if($classExists) {
             '/admin.php',
             '/admin.php*',
             '/admin*',
+            '/backend/*',
         );
     }
     $config['cdn_domain'] = \optipic\cdn\ImgUrlConverter::$cdnDomain;
