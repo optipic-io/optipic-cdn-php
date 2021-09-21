@@ -235,7 +235,7 @@ class ImgUrlConverter
         
         $regexp = array();
         foreach ($urlBorders as $border) {
-            $regexp[] = '#('.$border[0].')'.$host.'('.$firstPartOfUrl.'(?!'.$cdnDomainsForRegexp.')[^'.$border[2].']+\.(png|jpg|jpeg){1}(\?[^"\'\s]*?)?)\s*('.$border[1].')#siS';
+            $regexp[] = '#('.$border[0].')\s*'.$host.'('.$firstPartOfUrl.'(?!'.$cdnDomainsForRegexp.')[^'.$border[2].']+\.(png|jpg|jpeg){1}(\?[^"\'\s]*?)?)\s*('.$border[1].')#siS';
         }
         //var_dump($regexp);exit;
         
