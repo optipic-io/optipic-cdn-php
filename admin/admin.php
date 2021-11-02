@@ -5,7 +5,7 @@
  * |------ x.y   - version of main lib \optipic\cdn\ImgUrlConverter
  * |---------- z - version of admin script
  */
-define("OPTIPIC_PHP_CDN_ADMIN_VERSION", "7");
+define("OPTIPIC_PHP_CDN_ADMIN_VERSION", "8");
 
 include_once __DIR__.'/Lang.php';
 
@@ -166,6 +166,7 @@ if($classExists) {
 <html lang="en">
 
 <head>
+    <meta charset="utf-8">
     <title><?php echo Lang::t('title')?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
