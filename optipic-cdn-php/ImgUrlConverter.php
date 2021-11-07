@@ -16,7 +16,7 @@ class ImgUrlConverter
     /**
      * Library version number
      */
-    const VERSION = '1.22';
+    const VERSION = '1.23';
     
     /**
      * ID of your site on CDN OptiPic.io service
@@ -213,7 +213,7 @@ class ImgUrlConverter
         $urlBorders = array(
             array('"', '"', '"'),       // "<url>"
             array('\'', '\'', '\''),    // '<url>'
-            array('\(', '\)', '\)'),    // (<url>)
+            array('\(', '\)', '\)\('),    // (<url>)
             array('\\\"', '\\\"', '"'), // "<url>" in JSON
             array("\\\'", "\\\'", "'"), // '<url>' in JSON
         );
