@@ -16,7 +16,7 @@ class ImgUrlConverter
     /**
      * Library version number
      */
-    const VERSION = '1.24';
+    const VERSION = '1.25';
     
     /**
      * ID of your site on CDN OptiPic.io service
@@ -532,17 +532,26 @@ class ImgUrlConverter
         }
         //$baseUrl .= '/';
         
+        // CASE filepath ".img.png" (remove first dot)
+        if (substr($relativeUrl, 0, 1) == '.' && substr($relativeUrl, 1, 1) != '.') {
+            $relativeUrl = substr($relativeUrl, 1);
+        }
+        // CASE baseUrl "." (remove first dot)
+        if (strlen($baseUrl)>0 && substr($baseUrl, 0, 1) == '.' && substr($baseUrl, 1, 1) != '.') {
+            $baseUrl = (strlen($baseUrl)>1)? "".substr($baseUrl, 1): "";
+        }
+        
         // CASE /catalog + img.png (/catalogimg.png is wrong)
         if (substr($baseUrl, -1)!='/' && substr($relativeUrl, 0, 1) != '/') {
-            $tryUrl = str_replace($slash.$slash, $slash, $baseUrl.'/'.$relativeUrl);
+            $tryUrl = str_replace($slash.$slash, $slash, $baseUrl.$slash.$relativeUrl);
             // Try to /catalog/img.png
-            if (file_exists(self::getDocumentDoot().'/'.$tryUrl)) {
+            if (file_exists(self::getDocumentDoot().$slash.$tryUrl)) {
                 return $tryUrl;
             }
             // Try to /img.png
             else {
                 $tryUrl = str_replace($slash.$slash, $slash, '/'.$relativeUrl);
-                if (file_exists(self::getDocumentDoot().'/'.$tryUrl)) {
+                if (file_exists(self::getDocumentDoot().$slash.$tryUrl)) {
                     return $tryUrl;
                 }
             }
