@@ -70,10 +70,10 @@ class ImgUrlConverter
     public static function convertHtml($content, $detectBaseUrl = true)
     {
         
-        if(empty(self::$url)) {
+        if (empty(self::$url)) {
             self::$url = $_SERVER['REQUEST_URI'];
         }
-        if(empty(self::$host)) {
+        if (empty(self::$host)) {
             self::$host = $_SERVER['HTTP_HOST'];
         }
         
@@ -122,7 +122,7 @@ class ImgUrlConverter
         }
         
         
-        if($detectBaseUrl) {
+        if ($detectBaseUrl) {
             self::$baseUrl = self::getBaseUrlFromHtml($content);
             if (self::$baseUrl) {
                 self::$baseUrl = parse_url(self::$baseUrl, PHP_URL_PATH);
@@ -229,7 +229,6 @@ class ImgUrlConverter
         foreach ($cdnDomains as $cdnDomain) {
             $cdnDomainsForRegexp[] = '\/\/'.preg_quote($cdnDomain, '#');   // plain html
             $cdnDomainsForRegexp[] = '\\/\\/'.preg_quote($cdnDomain, '#'); // html in json
-            
         }
         $cdnDomainsForRegexp = implode("|", $cdnDomainsForRegexp);
         
@@ -397,8 +396,7 @@ class ImgUrlConverter
                 $parseUrl['query'] = trim(json_encode($parseUrl['query']), "'\"");
             }
             //var_dump($parseUrl);exit;
-        }
-        else {
+        } else {
             $parseUrl = parse_url($urlOriginal);
         }
         
@@ -551,9 +549,7 @@ class ImgUrlConverter
             // Try to /catalog/img.png
             if (file_exists(self::getDocumentDoot().$slash.$tryUrl)) {
                 return $tryUrl;
-            }
-            // Try to /img.png
-            else {
+            } else { // Try to /img.png
                 $tryUrl = str_replace($slash.$slash, $slash, '/'.$relativeUrl);
                 if (file_exists(self::getDocumentDoot().$slash.$tryUrl)) {
                     return $tryUrl;
@@ -768,7 +764,8 @@ class ImgUrlConverter
      * - /index.php?route=product/image/catalog/payment.png
      * - /manager/?a=system/file/edit&file=assets/template/css/../images/lines.png
      */
-    public static function urlHasPhpScript($url) {
+    public static function urlHasPhpScript($url)
+    {
         $ext = pathinfo($url, PATHINFO_EXTENSION);
         $posQ = stripos($url, '?');
         
