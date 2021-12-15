@@ -523,7 +523,7 @@ class ImgUrlConverter
             $relativeUrl = self::resolveFilename($relativeUrl, $slash);
         }
         
-        if (self::substr($relativeUrl, 0, strlen($slash))==$slash) {
+        if (self::substr($relativeUrl, 0, self::strlen($slash))==$slash) {
             return $relativeUrl;
         }
         /*if (self::substr($relativeUrl, 0, 2)=='\/') { // for json-encoded urls when / --> \/
@@ -537,16 +537,16 @@ class ImgUrlConverter
         //$baseUrl .= '/';
         
         // CASE filepath ".img.png" (remove first dot)
-        if (substr($relativeUrl, 0, 1) == '.' && substr($relativeUrl, 1, 1) != '.') {
-            $relativeUrl = substr($relativeUrl, 1);
+        if (self::substr($relativeUrl, 0, 1) == '.' && self::substr($relativeUrl, 1, 1) != '.') {
+            $relativeUrl = self::substr($relativeUrl, 1);
         }
         // CASE baseUrl "." (remove first dot)
-        if (strlen($baseUrl)>0 && substr($baseUrl, 0, 1) == '.' && substr($baseUrl, 1, 1) != '.') {
-            $baseUrl = (strlen($baseUrl)>1)? "".substr($baseUrl, 1): "";
+        if (self::strlen($baseUrl)>0 && self::substr($baseUrl, 0, 1) == '.' && self::substr($baseUrl, 1, 1) != '.') {
+            $baseUrl = (self::strlen($baseUrl)>1)? "".self::substr($baseUrl, 1): "";
         }
         
         // CASE /catalog + img.png (/catalogimg.png is wrong)
-        if (substr($baseUrl, -1)!='/' && substr($relativeUrl, 0, 1) != '/') {
+        if (self::substr($baseUrl, -1)!='/' && self::substr($relativeUrl, 0, 1) != '/') {
             $tryUrl = str_replace($slash.$slash, $slash, $baseUrl.$slash.$relativeUrl);
             // Try to /catalog/img.png
             if (file_exists(self::getDocumentDoot().$slash.$tryUrl)) {
