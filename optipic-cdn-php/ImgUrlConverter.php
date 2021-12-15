@@ -16,7 +16,7 @@ class ImgUrlConverter
     /**
      * Library version number
      */
-    const VERSION = '1.25';
+    const VERSION = '1.26';
     
     /**
      * ID of your site on CDN OptiPic.io service
@@ -418,6 +418,10 @@ class ImgUrlConverter
             return $replaceWithoutOptiPic;
         }
         
+        if (self::urlHasPhpScript($urlOriginal)) {
+            return $replaceWithoutOptiPic;
+        }
+        
         $urlOriginal = $parseUrl['path'];
         if (!empty($parseUrl['query'])) {
             $urlOriginal .= '?'.$parseUrl['query'];
@@ -755,5 +759,35 @@ class ImgUrlConverter
     public static function getDocumentDoot()
     {
          return $_SERVER['DOCUMENT_ROOT'];
+    }
+    
+    
+    /**
+     * Check if URL has php script logic (no static image)
+     * Examples:
+     * - /index.php?route=product/image/catalog/payment.png
+     * - /manager/?a=system/file/edit&file=assets/template/css/../images/lines.png
+     */
+    public static function urlHasPhpScript($url) {
+        $ext = pathinfo($url, PATHINFO_EXTENSION);
+        $posQ = stripos($url, '?');
+        
+        if (!$posQ) {
+            $posQ = stripos($url, '&');
+            if (!$posQ) {
+                return false;
+            }
+        }
+        
+        if (!$ext) {
+            return true;
+        }
+        
+        $posExt = stripos($url, $ext);
+        if ($posQ < $posExt) {
+            return true;
+        }
+        
+        return false;
     }
 }
