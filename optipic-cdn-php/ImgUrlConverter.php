@@ -16,7 +16,7 @@ class ImgUrlConverter
     /**
      * Library version number
      */
-    const VERSION = '1.26';
+    const VERSION = '1.27';
     
     /**
      * ID of your site on CDN OptiPic.io service
@@ -731,7 +731,7 @@ class ImgUrlConverter
     
     public static function substr($string, $offset, $length = null)
     {
-        return substr($string, $offset, $length);
+        return (($length===null)? substr($string, $offset): substr($string, $offset, $length));
     }
     
     
