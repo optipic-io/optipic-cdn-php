@@ -16,7 +16,7 @@ class ImgUrlConverter
     /**
      * Library version number
      */
-    const VERSION = '1.27';
+    const VERSION = '1.28';
     
     /**
      * ID of your site on CDN OptiPic.io service
@@ -786,5 +786,18 @@ class ImgUrlConverter
         }
         
         return false;
+    }
+    
+    
+    
+    public static function getDownloadSource() {
+        $source = false;
+        
+        $filepath = dirname(__FILE__) . '/.source';
+        if (file_exists($filepath)) {
+            return trim(file_get_contents($filepath));
+        }
+        
+        return $source;
     }
 }

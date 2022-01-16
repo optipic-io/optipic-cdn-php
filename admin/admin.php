@@ -5,7 +5,7 @@
  * |------ x.y   - version of main lib \optipic\cdn\ImgUrlConverter
  * |---------- z - version of admin script
  */
-define("OPTIPIC_PHP_CDN_ADMIN_VERSION", "8");
+define("OPTIPIC_PHP_CDN_ADMIN_VERSION", "9");
 
 include_once __DIR__.'/Lang.php';
 
@@ -484,7 +484,7 @@ $(function() {
 <?
 $siteId = !empty($config['site_id'])? $config['site_id']: '';
 ?>
-<script src="https://optipic.io/api/cp/stat?domain=<?=$_SERVER["HTTP_HOST"]?>&sid=<?=$siteId?>&cms=php-cdn&stype=cdn&append_to=.container:first&version=<?=$OPTIPIC_PHP_CDN_ADMIN_VERSION_FULL?>"></script>
+<script src="https://optipic.io/api/cp/stat?domain=<?=$_SERVER["HTTP_HOST"]?>&sid=<?=$siteId?>&cms=php-cdn&stype=cdn&append_to=.container:first&version=<?=$OPTIPIC_PHP_CDN_ADMIN_VERSION_FULL?>&source=<?=\optipic\cdn\ImgUrlConverter::getDownloadSource()?>"></script>
 
 </body>
 </html>
