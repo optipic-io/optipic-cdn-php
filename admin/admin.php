@@ -5,7 +5,7 @@
  * |------ x.y   - version of main lib \optipic\cdn\ImgUrlConverter
  * |---------- z - version of admin script
  */
-define("OPTIPIC_PHP_CDN_ADMIN_VERSION", "9");
+define("OPTIPIC_PHP_CDN_ADMIN_VERSION", "10");
 
 include_once __DIR__.'/Lang.php';
 
@@ -366,10 +366,18 @@ auto_prepend_file = <?php echo $pathToPrependFileRight?></pre>
                         <input type="number" name="optipicConfig[site_id]" class="form-control" id="optipic_site_id" aria-describedby="optipic_site_id_help" value="<?php echo $config['site_id']?>">
                         <small id="optipic_site_id_help" class="form-text text-muted"><?php echo Lang::t('sid_helper')?></small>
                     </div>
-                    
+                    <?
+                    $domainList = array();
+                    foreach ($config['domains'] as $domainItem) {
+                        if (!empty(\optipic\cdn\ImgUrlConverter::$additionalDomains[$domainItem])) {
+                            $domainItem .= ' '.\optipic\cdn\ImgUrlConverter::$additionalDomains[$domainItem];
+                        }
+                        $domainList[] = $domainItem;
+                    }
+                    ?>
                     <div class="form-group">
                         <label for="optipic_domains"><?php echo Lang::t('domains')?></label>
-                        <textarea name="optipicConfig[domains]" class="form-control" id="optipic_domains" rows="3"><?php echo implode("\n", $config['domains'])?></textarea>
+                        <textarea name="optipicConfig[domains]" class="form-control" id="optipic_domains" rows="3"><?php echo implode("\n", $domainList)?></textarea>
                         <small id="emailHelp" class="form-text text-muted">
                             <?php echo Lang::t('domains_helper')?>
                             <?php echo Lang::t('examples:')?><br/>
