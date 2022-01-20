@@ -5,7 +5,7 @@
  * |------ x.y   - version of main lib \optipic\cdn\ImgUrlConverter
  * |---------- z - version of admin script
  */
-define("OPTIPIC_PHP_CDN_ADMIN_VERSION", "10");
+define("OPTIPIC_PHP_CDN_ADMIN_VERSION", "11");
 
 include_once __DIR__.'/Lang.php';
 
@@ -157,6 +157,7 @@ if($classExists) {
             '/admin*',
             '/backend/*',
             '/webasyst/*',
+            '/inshop/*',
         );
     }
     $config['cdn_domain'] = \optipic\cdn\ImgUrlConverter::$cdnDomain;
