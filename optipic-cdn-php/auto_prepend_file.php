@@ -11,7 +11,9 @@
  * @copyright (c) 2020, https://optipic.io
  */
 
-require_once __DIR__.'/ImgUrlConverter.php';
+if (class_exists('\optipic\cdn\ImgUrlConverter') == false) {
+    require_once __DIR__.'/ImgUrlConverter.php';
+}
 
 \optipic\cdn\ImgUrlConverter::loadConfig();
 
