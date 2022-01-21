@@ -329,7 +329,7 @@ class ImgUrlConverter
                 $domainExploded = preg_split("/[\s,]+/siS", $domain);
                 if (!empty($domainExploded[1]) && !empty($domainExploded[0])) {
                     $domain = trim($domainExploded[0]);
-                    $domainSiteId = intval(trim($domainExploded[1]));
+                    $domainSiteId = (int) trim($domainExploded[1]);
                     self::$additionalDomains[$domain] = $domainSiteId;
                     self::$domains[$dKey] = $domain;
                 }
@@ -757,6 +757,11 @@ class ImgUrlConverter
         return strtolower($str);
     }
     
+    public static function file_get_contents($filepath)
+    {
+        return file_get_contents($filepath);
+    }
+    
     
     public static function htmlHasAmpMarkup($html)
     {
@@ -807,12 +812,13 @@ class ImgUrlConverter
     
     
     
-    public static function getDownloadSource() {
+    public static function getDownloadSource()
+    {
         $source = false;
         
         $filepath = dirname(__FILE__) . '/.source';
         if (file_exists($filepath)) {
-            return trim(file_get_contents($filepath));
+            return trim(self::file_get_contents($filepath));
         }
         
         return $source;
