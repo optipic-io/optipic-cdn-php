@@ -439,7 +439,7 @@ class ImgUrlConverter
         $urlOriginal = self::getUrlFromRelative($urlOriginal, self::$baseUrl, $slash);
         
         $sid = self::$siteId;
-        if (in_array($parseUrl['host'], array_keys(self::$additionalDomains))) {
+        if (!empty($parseUrl['host']) && in_array($parseUrl['host'], array_keys(self::$additionalDomains))) {
             $sid = self::$additionalDomains[$parseUrl['host']];
         }
         
