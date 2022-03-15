@@ -16,7 +16,7 @@ class ImgUrlConverter
     /**
      * Library version number
      */
-    const VERSION = '1.29';
+    const VERSION = '1.30';
     
     /**
      * ID of your site on CDN OptiPic.io service
@@ -127,7 +127,7 @@ class ImgUrlConverter
         if ($detectBaseUrl) {
             self::$baseUrl = self::getBaseUrlFromHtml($content);
             if (self::$baseUrl) {
-                self::$baseUrl = parse_url(self::$baseUrl, PHP_URL_PATH);
+                self::$baseUrl = self::parse_url(self::$baseUrl, PHP_URL_PATH);
             }
         }
         
@@ -401,7 +401,7 @@ class ImgUrlConverter
             //return $replaceWithoutOptiPic;
             $slash = '\\/';
             //var_dump($urlOriginal);
-            $parseUrl = parse_url(json_decode('"'.$urlOriginal.'"'));
+            $parseUrl = self::parse_url(json_decode('"'.$urlOriginal.'"'));
             //var_dump($parseUrl);
             $parseUrl['path'] = trim(json_encode($parseUrl['path']), "'\"");
             if (!empty($parseUrl['query'])) {
@@ -409,7 +409,7 @@ class ImgUrlConverter
             }
             //var_dump($parseUrl);exit;
         } else {
-            $parseUrl = parse_url($urlOriginal);
+            $parseUrl = self::parse_url($urlOriginal);
         }
         
         
@@ -608,7 +608,7 @@ class ImgUrlConverter
      */
     public static function getBaseDirOfUrl($url)
     {
-        $urlParsed = parse_url($url);
+        $urlParsed = self::parse_url($url);
         if (empty($urlParsed['path'])) {
             return '/';
         }
@@ -755,6 +755,35 @@ class ImgUrlConverter
     public static function strtolower($str)
     {
         return strtolower($str);
+    }
+    
+    /**
+     * parse_url() utf-8 compatible function
+     * https://www.php.net/manual/en/function.parse-url.php#108787
+     */
+    public static function parse_url($url, $part = -1) {
+        //$encodedUrl = preg_replace('%[^:/?#&=\.]+%usDe', 'urlencode(\'$0\')', $url);
+        
+        $encodedUrl = preg_replace_callback(
+            '%[^:/?#&=\.]+%usD', 
+            function($match) {
+                return urlencode($match[0]);
+            },   
+            $url
+        );
+        
+        if ($part != -1) {
+            return urldecode(parse_url($encodedUrl, $part));
+        }
+        else {
+            $components = parse_url($encodedUrl);
+            foreach ($components as &$component) {
+                $component = urldecode($component);
+            }
+            return $components;
+        }
+        
+        return false;
     }
     
     public static function file_get_contents($filepath)
