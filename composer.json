@@ -17,5 +17,5 @@
             "homepage": "https://optipic.io/en/cdn/"
         }
     ],
-    "minimum-stability": "dev"
+    "minimum-stability": "stable"
 }
