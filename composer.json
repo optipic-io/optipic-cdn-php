@@ -1,0 +1,19 @@
+{
+    "name": "optipic-io/optipic-cdn-php",
+    "description": "OptiPic CDN library to convert image urls contains in html/text data",
+    "type": "library",
+    "require": {
+        "php": ">=5.5.0"
+    },
+    "license": "MIT",
+    "autoload": {
+        "files": ["optipic-cdn-php/ImgUrlConverter.php"]
+    },
+    "authors": [
+        {
+            "name": "OptiPic.io",
+            "email": "help@optipic.io",
+            "homepage": "https://optipic.io/en/cdn/"
+        }
+    ]
+}
