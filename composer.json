@@ -1,6 +1,7 @@
 {
     "name": "optipic-io/optipic-cdn-php",
     "description": "OptiPic CDN library to convert image urls contains in html/text data",
+    "keywords": ["php", "compression", "optimization", "minify", "webp", "compress images", "optimize images", "image compression", "pagespeed", "google pagespeed insights", "speedup", "pagespeed insights", "image compressor", "speed up", "images optimized", "pagespeed optimization", "convert webp"],
     "type": "library",
     "require": {
         "php": ">=5.5.0"
