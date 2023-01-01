@@ -339,7 +339,7 @@ class ImgUrlConverter
             
             self::$whitelistImgUrls = self::textToArray($source['whitelist_img_urls']);
             
-            self::$srcsetAttrs = self::textToArray($source['srcset_attrs']);
+            self::$srcsetAttrs = (isset($source['srcset_attrs']))? self::textToArray($source['srcset_attrs']): self::getDefaultSettings('srcset_attrs');
             
             if (isset($source['admin_key'])) {
                 self::$adminKey = $source['admin_key'];
