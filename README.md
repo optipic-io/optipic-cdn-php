@@ -2,6 +2,23 @@
 Lib for PHP to integrate with CDN OptiPic.io (automatic images optimization and compression service)
 Use `ImgUrlConverter` class to **automatic convert all image URLs on your site**. 
 
+<sup>|</sup>
+<sup>[English](https://optipic.io/en/cdn/) | </sup>
+<sup>[Español](https://optipic.io/es/cdn/) | </sup>
+<sup>[Deutsch](https://optipic.io/de/cdn/) | </sup>
+<sup>[Türk](https://optipic.io/tr/cdn/) | </sup>
+<sup>[Français](https://optipic.io/fr/cdn/) | </sup>
+<sup>[Italiano](https://optipic.io/it/cdn/) | </sup>
+<sup>[Português](https://optipic.io/pt/cdn/) | </sup>
+<sup>[Polski](https://optipic.io/pl/cdn/) | </sup>
+<sup>[Čeština](https://optipic.io/cz/cdn/) | </sup>
+<sup>[Русский](https://optipic.io/ru/cdn/) | </sup>
+<sup>[Беларуская](https://optipic.io/by/cdn/) | </sup>
+<sup>[中国](https://optipic.io/cn/cdn/) | </sup>
+<sup>[日本](https://optipic.io/jp/cdn/) | </sup>
+<sup>[বেঙ্গল](https://optipic.io/bn/cdn/) | </sup>
+<sup>[한국인](https://optipic.io/ko/cdn/) | </sup>
+
 ## How to use
 1. [Register](https://optipic.io/register/?cdn) your account on OptiPic.io site.
 1. Add your site on OptiPic [CDN Control Panel](https://optipic.io/cdn/cp/).
